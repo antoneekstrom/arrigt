@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import Page from "../src/components/Page";
 import "../tailwind.css";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -9,7 +10,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>App</title>
         <link rel="icon" href="/favicon.jpg" />
       </Head>
-      <Component {...pageProps} />
+      <Page>
+        <Component {...pageProps} />
+      </Page>
     </div>
   );
 }
