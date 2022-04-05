@@ -37,7 +37,6 @@ export default function Main() {
       </a>
     </div>
   );
-
   return (
     <div className="flex flex-col justify-between lg:flex-row gap-12">
       <div className="grow basis-0">
