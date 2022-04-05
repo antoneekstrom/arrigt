@@ -1,3 +1,5 @@
+import { PrimaryButton } from "../src/components/PrimaryButton";
+
 export default function Main() {
   const Title = () => (
     <h1 className="text-3xl font-semibold leading-none mb-8">Kursenkätsfika</h1>
@@ -28,11 +30,20 @@ export default function Main() {
     />
   );
 
+  const RegisterButton = () => (
+    <div className="my-8">
+      <a href="/registered">
+        <PrimaryButton>Anmäl mig</PrimaryButton>
+      </a>
+    </div>
+  );
+
   return (
     <div className="flex flex-col justify-between lg:flex-row gap-12">
       <div className="grow basis-0">
         <Title />
         <Description />
+        <RegisterButton />
       </div>
       <div className="grow basis-0">
         <Poster />
