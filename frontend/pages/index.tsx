@@ -1,8 +1,13 @@
-import { PrimaryButton } from "../src/components/PrimaryButton";
+import { LayeredCard } from "../src/components/LayeredCard";
+import { CardButtonBase } from "../src/components/CardButtonBase";
+import { TextInput } from "../src/components/TextInput";
+
+const EMAIL_REGEX = /[a-zA-Z]([_.-]?[a-zA-Z])*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/;
+const NAME_REGEX = /[^"]+\s"[^"]+"\s[^"]+/;
 
 export default function Main() {
   const Title = () => (
-    <h1 className="text-3xl font-semibold leading-none mb-8">Kursenkätsfika</h1>
+    <h1 className="mb-8 text-3xl font-semibold leading-none">Kursenkätsfika</h1>
   );
 
   const Description = () => (
@@ -26,22 +31,42 @@ export default function Main() {
     <img
       src="poster-snit.png"
       alt="snIT poster"
-      className="rounded-lg w-full max-w-screen-sm md:max-h-full"
+      className="w-full max-w-screen-sm rounded-md md:max-h-full"
     />
   );
 
   const RegisterButton = () => (
     <div className="my-8">
-      <a href="/registered">
-        <PrimaryButton>Anmäl mig</PrimaryButton>
-      </a>
+      <LayeredCard primary depress hover>
+        <a href="/registered" className="px-12 py-3 inline-block outline-none">Anmäl mig!</a>
+      </LayeredCard>
     </div>
   );
+
   return (
-    <div className="flex flex-col justify-between lg:flex-row gap-12">
+    <div className="flex flex-col justify-between gap-12 lg:flex-row">
       <div className="grow basis-0">
         <Title />
         <Description />
+        <div className="my-8">
+          <TextInput
+            label="Mejl"
+            validate={(value) => ({
+              isValid: value.match(EMAIL_REGEX)?.[0].length === value.length,
+              message: "Mejladdressen är inte giltig.",
+            })}
+          />
+        </div>
+        <div className="my-8">
+          <TextInput
+            label={`Namn (Förnamn "Nick" Efternamn)`}
+            validate={(value) => ({
+              isValid: value.match(NAME_REGEX)?.[0].length === value.length,
+              message:
+                'Ditt namn behöver vara i formatet: Förnamn "Nick" Efternamn.',
+            })}
+          />
+        </div>
         <RegisterButton />
       </div>
       <div className="grow basis-0">
