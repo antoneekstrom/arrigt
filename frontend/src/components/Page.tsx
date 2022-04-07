@@ -3,8 +3,8 @@ import { PropsWithChildren } from "react";
 export default function Page({ children }: PropsWithChildren<unknown>) {
   const Logo = () => (
     <a href="/" className="text-lg font-medium">
-      arr<span className="text-turqoise-50">I</span>g
-      <span className="text-turqoise-50">T</span>
+      arr<span className="text-turquoise-50">I</span>g
+      <span className="text-turquoise-50">T</span>
     </a>
   );
 
