@@ -82,8 +82,8 @@ function RegistrationForm() {
 
   return (
     <form
-      onSubmit={handleSubmit((data) =>
-        console.log(JSON.parse(JSON.stringify(data)))
+      onSubmit={handleSubmit(() =>
+        window.location.href = "/registered"
       )}>
       <div className="mt-8 flex flex-col place-items-start gap-8">
         <FormCardInput
