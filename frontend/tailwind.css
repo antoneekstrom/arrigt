@@ -1,13 +1,49 @@
-
 /* Import Poppins from google fonts */
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
-/* Import Playfair Display from google fonts */
-@import url('https://fonts.googleapis.com/css?family=Playfair+Display:400,700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
 
+/* Import Playfair Display from google fonts */
+/* @import url("https://fonts.googleapis.com/css?family=Playfair+Display:400,700&display=swap"); */
+
+/* Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-gray-10;
+@layer base {
+  :root {
+    font-size: 14px;
+  }
+  body {
+    @apply bg-gray-100;
+    @apply selection:bg-turquoise-300 selection:text-turquoise-900;
+    @apply intent-neutral;
+  }
+}
+
+@layer utilities {
+  .intent-neutral {
+    --intent-color-primary-100: theme(colors.gray.100);
+    --intent-color-primary-500: theme(colors.gray.500);
+    --intent-color-primary-700: theme(colors.black.0);
+  }
+  .intent-disabled {
+    --intent-color-primary-100: theme(colors.gray.300);
+    --intent-color-primary-500: theme(colors.gray.500);
+    --intent-color-primary-700: theme(colors.gray.900);
+  }
+  .intent-primary {
+    --intent-color-primary-100: theme(colors.turquoise.100);
+    --intent-color-primary-500: theme(colors.turquoise.500);
+    --intent-color-primary-700: theme(colors.turquoise.700);
+  }
+  .intent-success {
+    --intent-color-primary-100: theme(colors.emerald.100);
+    --intent-color-primary-500: theme(colors.emerald.500);
+    --intent-color-primary-700: theme(colors.emerald.700);
+  }
+  .intent-error {
+    --intent-color-primary-100: theme(colors.red.100);
+    --intent-color-primary-500: theme(colors.red.500);
+    --intent-color-primary-700: theme(colors.red.700);
+  }
 }
