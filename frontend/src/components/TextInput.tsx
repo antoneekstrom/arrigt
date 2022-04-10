@@ -1,58 +1,73 @@
-import { PropsWithChildren, useState } from "react";
-import { LayeredCard } from "./LayeredCard";
+import { forwardRef, PropsWithChildren } from "react";
+import { FormState, RegisterOptions, UseFormRegister } from "react-hook-form";
+import { Card } from "./Card";
 import { WithLabel } from "./WithLabel";
 
-type Validate = (value: string) => {
-  isValid: boolean;
-  message?: string;
-};
-
-export type TextInputProps = {
+export type CardInputProps = React.HTMLAttributes<HTMLInputElement> & {
   label: string;
-  validate?: Validate;
+  classNameWrapper?: string;
+  icon?: JSX.Element;
 };
 
-export function TextInput({ label, validate }: TextInputProps) {
-  const [value, setValue] = useState("");
-  const [hasTyped, setHasTyped] = useState(false);
-  const [hasBlurred, setHasBlurred] = useState(false);
+export type FormCardInputProps = Omit<CardInputProps, "classNameWrapper" | "icon"> & {
+  register: UseFormRegister<any>;
+  state: FormState<any>;
+  options?: RegisterOptions<any>;
+  name: string;
+};
 
-  const isValidated = validate !== undefined;
-  const showError = isValidated && hasTyped && hasBlurred;
-  const showValid = isValidated && hasTyped;
+export function FormCardInput({
+  register,
+  name,
+  state: { errors, touchedFields },
+  options,
+  ...props
+}: FormCardInputProps) {
+  let intent = "intent-neutral";
+  let icon = <EmptyIcon />;
 
-  const { isValid, message } = validate?.(value) ?? { isValid: true };
-
-  const StatusIcon = () => {
-    if (showError && !isValid) {
-      return <InvalidIcon>{message}</InvalidIcon>;
-    }
-
-    if (showValid && isValid) {
-      return <ValidIcon />;
-    }
-
-    return <EmptyIcon />;
-  };
+  if (errors[name]) {
+    intent = "intent-error";
+    icon = <InvalidIcon>{errors[name].message}</InvalidIcon>;
+  } else if (touchedFields[name]) {
+    intent = "intent-primary";
+    icon = <ValidIcon />;
+  }
 
   return (
-    <WithLabel label={label}>
-      <LayeredCard depress>
-        <div className="flex flex-row place-items-center justify-between pr-3">
-          <input
-            type="text"
-            className="rounded-lg bg-none py-3 pl-12 outline-none"
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-              setHasTyped(true);
-            }}
-            onBlur={() => setHasBlurred(true)}
-          />
-          <StatusIcon />
-        </div>
-      </LayeredCard>
-    </WithLabel>
+    <CardInput
+      {...props}
+      {...register(name, options)}
+      classNameWrapper={intent}
+      icon={icon}
+    />
+  );
+}
+
+export const CardInput = forwardRef<HTMLInputElement, CardInputProps>(
+  ({ label, classNameWrapper, icon, ...props }, ref) => {
+    return (
+      <WithLabel label={label}>
+        <Card className={classNameWrapper}>
+          <Wrapper>
+            <input
+              {...props}
+              ref={ref}
+              className="bg-transparent py-3 pl-8 text-intent-primary-700 outline-none"
+            />
+            {icon}
+          </Wrapper>
+        </Card>
+      </WithLabel>
+    );
+  }
+);
+
+function Wrapper({ children }: PropsWithChildren<unknown>) {
+  return (
+    <div className="flex flex-row place-items-center justify-between pr-3">
+      {children}
+    </div>
   );
 }
 
@@ -62,7 +77,7 @@ function EmptyIcon() {
 
 function ValidIcon() {
   return (
-    <div className="grid h-8 w-8 place-items-center rounded-md bg-turquoise-10">
+    <div className="grid h-8 w-8 place-items-center rounded-md bg-intent-primary-100 text-intent-primary-500">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6"
@@ -77,9 +92,15 @@ function ValidIcon() {
 }
 
 function InvalidIcon({ children }: PropsWithChildren<unknown>) {
+  const Message = () => (
+    <div className="absolute left-14 hidden w-max max-w-md rounded-md bg-intent-primary-100 px-4 py-3 text-intent-primary-700 group-hover:block">
+      {children}
+    </div>
+  );
+
   return (
-    <div className="z-10 group relative grid h-8 w-8 place-items-center rounded-md bg-red-10 text-red-50">
-      <span className="absolute hidden group-hover:block left-14 bg-red-10 px-4 py-3 rounded-md w-max max-w-md">{children}</span>
+    <div className="group relative z-10 grid h-8 w-8 place-items-center rounded-md bg-intent-primary-100 text-intent-primary-500">
+      <Message />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6"
