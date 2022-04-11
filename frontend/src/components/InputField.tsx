@@ -40,10 +40,14 @@ export function FormInputFieldWithMessageBox({
  * An input field for a form.
  */
 export function FormInputField({ ...props }: FormInputFieldProps) {
+  const isRequired = props.options?.required;
+  const label = `${props.label}${isRequired ? "*" : ""}`;
+
   return (
     <InputField
       {...props}
       {...registerWithProps(props)}
+      label={label}
       icon={getInputStateIcon(props)}
       message={getErrorMessage(props)}
       className={getInputStateIntent(props)}
