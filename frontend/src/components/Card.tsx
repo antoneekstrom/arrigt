@@ -2,7 +2,7 @@ import { PropsWithChildren } from "react";
 
 type WithClassName = {
   className?: string;
-}
+};
 
 export type CardProps = PropsWithChildren<{
   className?: string;
@@ -19,7 +19,7 @@ export function Card({
   return (
     <div className={`${className} inline-block`}>
       <CardBehind className={classNameBehind}>
-        <CardInFront className={classNameInFront}>{children}</CardInFront>
+        <CardInFront className={`${classNameInFront} z-0`}>{children}</CardInFront>
       </CardBehind>
     </div>
   );
@@ -31,7 +31,7 @@ export function CardInFront({
 }: PropsWithChildren<WithClassName>) {
   return (
     <CardBase
-      className={`${className} translate-x-1 -translate-y-1 border-2 border-intent-primary-500 bg-gray-0 transition-transform focus-within:translate-x-0 focus-within:translate-y-0`}>
+      className={`${className} translate-x-1 -translate-y-1 border-2 border-intent-500 bg-intent-0 transition-transform focus-within:translate-x-0 focus-within:translate-y-0 focus-within:ring-4 focus-within:ring-intent-focus-300 focus-within:ring-offset-4`}>
       {children}
     </CardBase>
   );
@@ -42,9 +42,7 @@ export function CardBehind({
   className,
 }: PropsWithChildren<WithClassName>) {
   return (
-    <CardBase className={`${className} bg-intent-primary-500`}>
-      {children}
-    </CardBase>
+    <CardBase className={`${className} bg-intent-500`}>{children}</CardBase>
   );
 }
 

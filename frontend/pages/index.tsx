@@ -1,6 +1,6 @@
-import { SubmitCardButton } from "../src/components/CardButton";
+import { CardSubmitButton } from "../src/components/CardButton";
 import { Card } from "../src/components/Card";
-import { FormCardInput } from "../src/components/TextInput";
+import { FormCardInput } from "../src/components/CardInput";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
@@ -38,11 +38,11 @@ export default function Main() {
   );
 
   const RegisterButton = () => (
-    <div className="intent-primary my-8">
+    <div className="intent my-8">
       <Card>
         <a
           href="/registered"
-          className="inline-block px-12 py-3 text-intent-primary-500 outline-none">
+          className="inline-block px-12 py-3 text-intent-500 outline-none">
           Anmäl mig!
         </a>
       </Card>
@@ -50,8 +50,8 @@ export default function Main() {
   );
 
   return (
-    <div className="flex flex-col justify-between gap-12 lg:flex-row">
-      <div className="grow-[3] basis-0">
+    <div className="flex flex-col justify-between gap-24 lg:flex-row">
+      <div className="grow-[3] basis-0 max-w-screen-md">
         <Title />
         <Description />
         <RegistrationForm />
@@ -70,7 +70,7 @@ function RegistrationForm() {
   };
 
   const { register, handleSubmit, formState, reset } = useForm<FormType>({
-    mode: "onBlur",
+    mode: "onTouched",
   });
 
   const formProps = {
@@ -78,51 +78,52 @@ function RegistrationForm() {
     state: formState,
   };
 
-  useEffect(() => reset(), []);
+  console.log({formState});
+  const disableSubmit = !formState.isValid;
 
+  useEffect(() => reset(), []);
+  
   return (
-    <form
-      onSubmit={handleSubmit(() =>
-        window.location.href = "/registered"
-      )}>
+    <form onSubmit={handleSubmit(() => (window.location.href = "/registered"))}>
       <div className="mt-8 flex flex-col place-items-start gap-8">
-        <FormCardInput
-          {...formProps}
-          label="Mejl"
-          name="email"
-          options={{
-            pattern: {
-              value: EMAIL_REGEX,
-              message: "Felaktig mejladress.",
-            },
-            required: {
-              value: true,
-              message: "Du måste ange en mejladress.",
-            },
-          }}
-        />
-        <FormCardInput
-          {...formProps}
-          label={`Förnamn "Nick" Efternamn`}
-          name="name"
-          options={{
-            pattern: {
-              value: NAME_REGEX,
-              message:
-                "Namn måste vara i formatet 'Förnamn \"Nick\" Efternamn'.",
-            },
-            required: {
-              value: true,
-              message: "Du måste ange ditt namn.",
-            },
-          }}
-        />
-        <div
-          className={formState.isValid ? "intent-primary" : "intent-disabled"}>
-          <SubmitCardButton
+        <div className="grid grid-cols-2 gap-8">
+          <FormCardInput
+            {...formProps}
+            label="Mejl"
+            name="email"
+            options={{
+              pattern: {
+                value: EMAIL_REGEX,
+                message: "Felaktig mejladress.",
+              },
+              required: {
+                value: true,
+                message: "Du måste ange en mejladress.",
+              },
+            }}
+          />
+          <FormCardInput
+            {...formProps}
+            label={`Förnamn "Nick" Efternamn`}
+            name="name"
+            options={{
+              pattern: {
+                value: NAME_REGEX,
+                message:
+                  "Namn måste vara i formatet 'Förnamn \"Nick\" Efternamn'.",
+              },
+              required: {
+                value: true,
+                message: "Du måste ange ditt namn.",
+              },
+            }}
+          />
+        </div>
+        <div className={disableSubmit ? "intent-disabled" : "intent-primary"}>
+          <CardSubmitButton
             primary
             value="Anmäl mig!"
-            disabled={!formState.isValid}
+            disabled={disableSubmit}
           />
         </div>
       </div>

@@ -32,9 +32,14 @@ module.exports = {
       },
       transparent: "transparent",
       intent: {
-        "primary-100": "var(--intent-color-primary-100)",
-        "primary-500": "var(--intent-color-primary-500)",
-        "primary-700": "var(--intent-color-primary-700)",
+        "0": "var(--intent-color-0)",
+        "100": "var(--intent-color-100)",
+        "300": "var(--intent-color-300)",
+        "500": "var(--intent-color-500)",
+        "700": "var(--intent-color-700)",
+        "focus-300": "var(--intent-color-focus-300)",
+        "focus-500": "var(--intent-color-focus-500)",
+        "focus-700": "var(--intent-color-focus-700)",
       },
     }),
     fontFamily: {
@@ -42,7 +47,8 @@ module.exports = {
       serif: ["Playfair Display", "serif"],
     },
     fontSize: {
-      sm: "0.75rem",
+      xs: "0.75rem",
+      sm: "0.9rem",
       base: "1rem",
       md: "1.25rem",
       lg: "2rem",

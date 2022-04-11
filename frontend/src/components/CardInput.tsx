@@ -9,7 +9,10 @@ export type CardInputProps = React.HTMLAttributes<HTMLInputElement> & {
   icon?: JSX.Element;
 };
 
-export type FormCardInputProps = Omit<CardInputProps, "classNameWrapper" | "icon"> & {
+export type FormCardInputProps = Omit<
+  CardInputProps,
+  "classNameWrapper" | "icon"
+> & {
   register: UseFormRegister<any>;
   state: FormState<any>;
   options?: RegisterOptions<any>;
@@ -47,13 +50,13 @@ export function FormCardInput({
 export const CardInput = forwardRef<HTMLInputElement, CardInputProps>(
   ({ label, classNameWrapper, icon, ...props }, ref) => {
     return (
-      <WithLabel label={label}>
-        <Card className={classNameWrapper}>
+      <WithLabel label={label} className="w-full">
+        <Card className={`${classNameWrapper} w-full`}>
           <Wrapper>
             <input
               {...props}
               ref={ref}
-              className="bg-transparent py-3 pl-8 text-intent-primary-700 outline-none"
+              className="w-full bg-transparent py-3 pl-6 text-intent-700 outline-none"
             />
             {icon}
           </Wrapper>
@@ -65,19 +68,19 @@ export const CardInput = forwardRef<HTMLInputElement, CardInputProps>(
 
 function Wrapper({ children }: PropsWithChildren<unknown>) {
   return (
-    <div className="flex flex-row place-items-center justify-between pr-3">
+    <div className="flex w-full flex-row place-items-center justify-between pr-3">
       {children}
     </div>
   );
 }
 
 function EmptyIcon() {
-  return <div className="h-8 w-8" />;
+  return <div className="h-8 w-8 flex-shrink-0" />;
 }
 
 function ValidIcon() {
   return (
-    <div className="grid h-8 w-8 place-items-center rounded-md bg-intent-primary-100 text-intent-primary-500">
+    <div className="grid h-8 w-8 flex-shrink-0 place-items-center rounded-md bg-intent-100 text-intent-500">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6"
@@ -93,13 +96,13 @@ function ValidIcon() {
 
 function InvalidIcon({ children }: PropsWithChildren<unknown>) {
   const Message = () => (
-    <div className="absolute left-14 hidden w-max max-w-md rounded-md bg-intent-primary-100 px-4 py-3 text-intent-primary-700 group-hover:block">
+    <div className="absolute z-10 left-14 hidden w-max max-w-md rounded-md bg-intent-100 px-4 py-3 text-intent-700 group-hover:block">
       {children}
     </div>
   );
 
   return (
-    <div className="group relative z-10 grid h-8 w-8 place-items-center rounded-md bg-intent-primary-100 text-intent-primary-500">
+    <div className="group relative grid h-8 w-8 flex-shrink-0 place-items-center rounded-md bg-intent-100 text-intent-500">
       <Message />
       <svg
         xmlns="http://www.w3.org/2000/svg"

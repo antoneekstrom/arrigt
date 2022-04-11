@@ -6,7 +6,7 @@ type BaseProps = {
 
 export type CardButtonProps = React.HTMLAttributes<HTMLButtonElement> & BaseProps;
 
-export type SubmitCardButtonProps = React.HTMLProps<HTMLInputElement> & BaseProps;
+export type CardSubmitButtonProps = React.HTMLProps<HTMLInputElement> & BaseProps;
 
 export function CardButton({
   children,
@@ -25,16 +25,14 @@ export function CardButton({
   );
 }
 
-export function SubmitCardButton({ primary, ...props }: SubmitCardButtonProps) {
+export function CardSubmitButton({ primary, ...props }: CardSubmitButtonProps) {
   return (
     <Card>
-      <div className="bg-intent-primary-100 rounded-md">
-        <input
-          {...props}
-          type="submit"
-          className="cursor-pointer disabled:cursor-auto rounded-lg px-6 py-3 text-base text-intent-primary-500 outline-none"
-        />
-      </div>
+      <input
+        {...props}
+        type="submit"
+        className="cursor-pointer disabled:cursor-auto rounded-lg px-6 py-3 text-base text-intent-700 outline-none"
+      />
     </Card>
   );
 }
