@@ -6,20 +6,25 @@ type WithClassName = {
 
 export type CardProps = PropsWithChildren<{
   className?: string;
+  classNameAll?: string;
   classNameBehind?: string;
   classNameInFront?: string;
 }>;
 
+/**
+ * A card that can be used to wrap other components.
+ */
 export function Card({
   children,
   className,
   classNameBehind,
   classNameInFront,
+  classNameAll
 }: PropsWithChildren<CardProps>) {
   return (
-    <div className={`${className} inline-block`}>
-      <CardBehind className={classNameBehind}>
-        <CardInFront className={`${classNameInFront} z-0`}>{children}</CardInFront>
+    <div className={`${className} ${classNameAll} inline-block`}>
+      <CardBehind className={`${classNameBehind} ${classNameAll}`}>
+        <CardInFront className={`${classNameInFront} ${classNameAll} z-0`}>{children}</CardInFront>
       </CardBehind>
     </div>
   );
@@ -31,7 +36,7 @@ export function CardInFront({
 }: PropsWithChildren<WithClassName>) {
   return (
     <CardBase
-      className={`${className} translate-x-1 -translate-y-1 border-2 border-intent-500 bg-intent-0 transition-transform focus-within:translate-x-0 focus-within:translate-y-0 focus-within:ring-4 focus-within:ring-intent-focus-300 focus-within:ring-offset-4`}>
+      className={`${className} overflow-clip translate-x-1 -translate-y-1 border-2 border-intent-500 bg-intent-0 transition-transform focus-within:translate-x-0 focus-within:translate-y-0 focus-within:ring-4 focus-within:ring-intent-focus-300 focus-within:ring-offset-4`}>
       {children}
     </CardBase>
   );

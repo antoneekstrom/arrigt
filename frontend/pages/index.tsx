@@ -1,8 +1,8 @@
-import { CardSubmitButton } from "../src/components/CardButton";
-import { Card } from "../src/components/Card";
-import { FormCardInput } from "../src/components/CardInput";
+import { SubmitFormButton } from "../src/components/Button";
+import { FormInputField, FormInputFieldWithMessageBox } from "../src/components/InputField";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import { MessageBox } from "../src/components/MessageBox";
 
 const EMAIL_REGEX = /[a-zA-Z]([_.-]?[a-zA-Z])*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/;
 const NAME_REGEX = /[^"]+\s"[^"]+"\s[^"]+/;
@@ -37,21 +37,9 @@ export default function Main() {
     />
   );
 
-  const RegisterButton = () => (
-    <div className="intent my-8">
-      <Card>
-        <a
-          href="/registered"
-          className="inline-block px-12 py-3 text-intent-500 outline-none">
-          Anmäl mig!
-        </a>
-      </Card>
-    </div>
-  );
-
   return (
     <div className="flex flex-col justify-between gap-24 lg:flex-row">
-      <div className="grow-[3] basis-0 max-w-screen-md">
+      <div className="max-w-screen-md grow-[3] basis-0">
         <Title />
         <Description />
         <RegistrationForm />
@@ -78,16 +66,13 @@ function RegistrationForm() {
     state: formState,
   };
 
-  console.log({formState});
-  const disableSubmit = !formState.isValid;
-
   useEffect(() => reset(), []);
-  
+
   return (
     <form onSubmit={handleSubmit(() => (window.location.href = "/registered"))}>
       <div className="mt-8 flex flex-col place-items-start gap-8">
-        <div className="grid grid-cols-2 gap-8">
-          <FormCardInput
+        <div className="flex w-full flex-col gap-8 sm:flex-row">
+          <FormInputField
             {...formProps}
             label="Mejl"
             name="email"
@@ -101,8 +86,9 @@ function RegistrationForm() {
                 message: "Du måste ange en mejladress.",
               },
             }}
+            className="grow w-full"
           />
-          <FormCardInput
+          <FormInputField
             {...formProps}
             label={`Förnamn "Nick" Efternamn`}
             name="name"
@@ -117,14 +103,19 @@ function RegistrationForm() {
                 message: "Du måste ange ditt namn.",
               },
             }}
+            className="grow w-full"
           />
         </div>
-        <div className={disableSubmit ? "intent-disabled" : "intent-primary"}>
-          <CardSubmitButton
-            primary
+        <div className="w-full grid grid-cols-2 gap-8">
+          <SubmitFormButton
             value="Anmäl mig!"
-            disabled={disableSubmit}
+            disabled={!formState.isValid}
           />
+          <div className="flex flex-col gap-2">
+            {Object.entries(formState.errors).map(([name, { message }]) => (
+              <MessageBox className="intent-error">{message}</MessageBox>
+            ))}
+          </div>
         </div>
       </div>
     </form>

@@ -9,6 +9,36 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes background-scroll {
+  0%, 50% {
+    transform: translateX(-100%);
+  }
+  50%, 100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes jiggle {
+  0% {
+    transform: translateY(0) rotate(0);
+  }
+  20% {
+    transform: translateY(-3px) rotate(0);
+  }
+  40% {
+    transform: translateY(-5px) rotate(4deg) scaleX(0.98);
+  }
+  60% {
+    transform: translateY(-5px) rotate(-2deg);
+  }
+  80% {
+    transform: translateY(3px) rotate(3deg) scaleX(1.02);
+  }
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+}
+
 @layer base {
   :root {
     font-size: 14px;
@@ -22,6 +52,24 @@
 }
 
 @layer utilities {
+  .jiggle {
+    animation: jiggle 300ms ease-in-out 1;
+  }
+
+  .shine {
+    background: linear-gradient(
+      130deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(231, 252, 254, 0.5) 40%,
+      rgba(231, 252, 254, 0.5) 60%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    animation: background-scroll 3s linear;
+    animation-iteration-count: infinite;
+  }
+
   .intent-neutral {
     --intent-color-0: theme(colors.gray.0);
     --intent-color-100: theme(colors.gray.100);
@@ -42,12 +90,32 @@
     --intent-color-focus-500: theme(colors.gray.500);
     --intent-color-focus-700: theme(colors.gray.700);
   }
+  .intent-disabled-full {
+    --intent-color-0: theme(colors.gray.300);
+    --intent-color-100: theme(colors.gray.300);
+    --intent-color-300: theme(colors.gray.300);
+    --intent-color-500: theme(colors.gray.700);
+    --intent-color-700: theme(colors.gray.900);
+    --intent-color-focus-300: theme(colors.gray.300);
+    --intent-color-focus-500: theme(colors.gray.500);
+    --intent-color-focus-700: theme(colors.gray.700);
+  }
   .intent-primary {
     --intent-color-0: theme(colors.gray.0);
     --intent-color-100: theme(colors.turquoise.100);
     --intent-color-300: theme(colors.turquoise.300);
     --intent-color-500: theme(colors.turquoise.500);
     --intent-color-700: theme(colors.turquoise.700);
+    --intent-color-focus-300: theme(colors.turquoise.300);
+    --intent-color-focus-500: theme(colors.turquoise.500);
+    --intent-color-focus-700: theme(colors.turquoise.700);
+  }
+  .intent-primary-full {
+    --intent-color-0: theme(colors.turquoise.500);
+    --intent-color-100: theme(colors.turquoise.100);
+    --intent-color-300: theme(colors.turquoise.300);
+    --intent-color-500: theme(colors.turquoise.700);
+    --intent-color-700: theme(colors.turquoise.100);
     --intent-color-focus-300: theme(colors.turquoise.300);
     --intent-color-focus-500: theme(colors.turquoise.500);
     --intent-color-focus-700: theme(colors.turquoise.700);
