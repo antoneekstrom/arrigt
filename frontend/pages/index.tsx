@@ -106,12 +106,12 @@ function RegistrationForm() {
             className="grow w-full"
           />
         </div>
-        <div className="w-full grid grid-cols-2 gap-8">
+        <div className="w-full grid gap-8 grid-cols-1 sm:grid-cols-2">
           <SubmitFormButton
             value="Anmäl mig!"
             disabled={!formState.isValid}
           />
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 min-h-[8rem]">
             {Object.entries(formState.errors).map(([name, { message }]) => (
               <MessageBox className="intent-error">{message}</MessageBox>
             ))}
