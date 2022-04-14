@@ -38,7 +38,7 @@ export default function Main() {
   );
 
   return (
-    <div className="flex flex-col justify-between gap-24 lg:flex-row">
+    <div className="flex flex-col justify-between gap-24 lg:flex-row mt-28">
       <div className="max-w-screen-md grow-[3] basis-0">
         <Title />
         <Description />
