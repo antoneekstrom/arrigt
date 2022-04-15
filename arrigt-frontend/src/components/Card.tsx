@@ -23,7 +23,7 @@ export function Card({
 }: PropsWithChildren<CardProps>) {
   return (
     <div className={`${className} ${classNameAll} inline-block`}>
-      <CardBehind className={`${classNameBehind} ${classNameAll}`}>
+      <CardBehind className={`${classNameBehind} ${classNameAll} translate-y-2`}>
         <CardInFront className={`${classNameInFront} ${classNameAll} z-0`}>{children}</CardInFront>
       </CardBehind>
     </div>

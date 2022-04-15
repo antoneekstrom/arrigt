@@ -5,7 +5,7 @@ import { WithLabel } from "./Label";
 import { MessageBox } from "./MessageBox";
 import { IconEmpty, IconError, IconValid } from "./ValidationIcon";
 
-export type InputFieldProps = React.HTMLAttributes<HTMLInputElement> & {
+export type InputFieldProps = React.HTMLProps<HTMLInputElement> & {
   label: string;
   icon?: JSX.Element;
   message?: string;
