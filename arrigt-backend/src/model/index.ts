@@ -1,10 +1,13 @@
+import { GDPR } from "./privacypolicy";
 
 /**
- * 
+ * An event.
  */
 export type Event = {
   id: string;
-}
+  name?: string;
+  date?: Date;
+};
 
 /**
  * A registration to an event.
@@ -32,8 +35,8 @@ export type UserIdentity = {
  * The data of a user who has registered to a certain event.
  */
 export type UserData = {
-  mealPreferences: MealPreference[];
-  gdpr: boolean;
+  mealPreferences?: MealPreference[];
+  gdpr: GDPR;
 };
 
 /**

@@ -2,8 +2,9 @@ import "reflect-metadata";
 import express from "express";
 import { schema } from "./graphql/schema";
 import { addGraphqlRoute } from "./app/routes/graphql";
-import { configureCors } from "./app/configure/cors";
+import { configureCors, getCorsMiddleware } from "./app/configure/cors";
 import { start } from "./app";
+import http from "http";
 
 run();
 
@@ -12,9 +13,10 @@ run();
  */
 async function run() {
   const app = express();
+  const httpServer = new http.Server(app);
 
-  configureCors(app);
-  addGraphqlRoute(app, await schema(), "/graphql");
+  await addGraphqlRoute(app, httpServer, await schema(), "/graphql");
 
-  start(app);
+  await new Promise<void>(resolve => httpServer.listen({ port: 3000 }, resolve));
+  console.log("Server started");
 }

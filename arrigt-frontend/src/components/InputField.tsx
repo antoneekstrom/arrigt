@@ -1,11 +1,11 @@
-import { forwardRef, PropsWithChildren } from "react";
+import { forwardRef, HTMLProps, PropsWithChildren } from "react";
 import { FormState, RegisterOptions, UseFormRegister } from "react-hook-form";
 import { Card } from "./Card";
 import { WithLabel } from "./Label";
 import { MessageBox } from "./MessageBox";
 import { IconEmpty, IconError, IconValid } from "./ValidationIcon";
 
-export type InputFieldProps = React.HTMLProps<HTMLInputElement> & {
+export type InputFieldProps = HTMLProps<HTMLInputElement> & {
   label: string;
   icon?: JSX.Element;
   message?: string;
@@ -65,12 +65,12 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         htmlFor={label}
         label={label}
         className={`${className} relative w-full`}>
-        <Card classNameAll={"w-full"}>
+        <Card focus classNameAll={"w-full"}>
           <div className="flex w-full flex-row place-items-center justify-between pr-3">
             <input
               {...props}
               ref={ref}
-              className="w-full bg-transparent py-3 pl-6 pr-3 text-intent-700 outline-none"
+              className="w-full bg-transparent py-3 pl-6 pr-3 text-intent-700 outline-none caret-intent-700"
               id={label}
             />
             {icon}

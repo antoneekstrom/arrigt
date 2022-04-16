@@ -25,6 +25,17 @@ const GET_REGISTRATIONS_QUERY: TypedDocumentNode<RegistrationsData> = gql`
         name
         nickname
       }
+      userData {
+        gdpr {
+          accepted
+          agreement {
+            responsible {
+              name
+              email
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -152,13 +163,5 @@ function RegistrationsResult({
     );
   }
 
-  return (
-    <pre>
-      {JSON.stringify(
-        registrations,
-        null,
-        2
-      )}
-    </pre>
-  );
+  return <pre>{JSON.stringify(registrations, null, 2)}</pre>;
 }
