@@ -35,6 +35,7 @@ export function SubmitFormButton({
 }: CardSubmitButtonProps) {
   return (
     <Card
+      focus
       className={`${!disabled ? "jiggle" : ""} ${
         disabled ? "intent-disabled-full" : "intent-primary-full"
       }`}
@@ -51,7 +52,7 @@ export function SubmitFormButton({
           aria-disabled={disabled ? "true" : "false"}
           className={`${
             !disabled ? "cursor-pointer" : ""
-          } w-full relative z-10 rounded-lg px-6 py-3 text-base text-intent-700 outline-none`}
+          } relative z-10 w-full rounded-lg px-6 py-3 text-base text-intent-700 outline-none`}
         />
       </div>
     </Card>

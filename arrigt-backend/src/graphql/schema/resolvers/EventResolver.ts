@@ -19,7 +19,9 @@ export class EventResolver {
    *
    * @returns the events
    */
-  @Query((returns) => [EventObjectType])
+  @Query((returns) => [EventObjectType], {
+    description: "Returns all events which there are registrations for.",
+  })
   async events() {
     const result = await this.registrationService.getAllRegistrations();
 
@@ -42,7 +44,9 @@ export class EventResolver {
    * @param event the given event
    * @returns the registrations
    */
-  @FieldResolver((returns) => [RegistrationObjectType])
+  @FieldResolver((returns) => [RegistrationObjectType], {
+    description: "Returns all registrations for the given event.",
+  })
   async registrations(@Root() event: EventObjectType) {
     return await this.registrationService.getRegistrationsByEventId(event.id);
   }
