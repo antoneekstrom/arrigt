@@ -1,0 +1,15 @@
+FROM node:17-alpine AS build
+
+COPY .. .
+
+RUN yarn install
+
+
+
+FROM node:17-alpine AS run
+
+COPY --from=build .. .
+
+WORKDIR /arrigt-frontend
+
+CMD ["yarn", "dev"]
