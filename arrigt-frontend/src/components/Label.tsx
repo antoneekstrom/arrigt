@@ -18,7 +18,7 @@ export function Label({ className, ...props }: React.HTMLProps<HTMLLabelElement>
  */
 export function WithLabel({ children, className, label, htmlFor }: WithLabelProps) {
   return (
-    <div className={`${className} inline-flex flex-col gap-y-3`}>
+    <div className={`${className} inline-flex flex-col gap-y-2`}>
       <Label htmlFor={htmlFor}>{label}</Label>
       {children}
     </div>
