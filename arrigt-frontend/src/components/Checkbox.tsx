@@ -10,7 +10,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           ref={ref}
           {...props}
           type="checkbox"
-          className="accent-turquoise-700"
+          className="accent-intent-focus-700"
         />
         <span className="text-sm">{children}</span>
       </label>

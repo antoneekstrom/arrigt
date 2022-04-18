@@ -1,18 +1,14 @@
 import { SubmitFormButton } from "./Button";
 import { FormInputField, FormInputFieldProps } from "./InputField";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useMutation } from "urql";
 import { UserIdentity } from "arrigt-backend/src/model";
 import { FormErrors } from "./FormErrors";
 import { PrivacyPolicy } from "./PrivacyPolicy";
 import { DataPrivacyAgreement } from "arrigt-backend/src/model/privacypolicy";
-import { ADD_REGISTRATION, EMAIL_REGEX, NAME_REGEX } from "../../pages/index";
 import { WithLabel } from "./Label";
-
-export type RegistrationFormType = Pick<UserIdentity, "name" | "email"> & {
-  gdpr: boolean;
-};
+import { ADD_REGISTRATION } from "../graphql/queries";
 
 export function RegistrationForm() {
   async function onSubmit({ name, email, gdpr }: RegistrationFormType) {
@@ -32,102 +28,108 @@ export function RegistrationForm() {
     window.location.href = "/registered";
   }
 
+  function EmailField() {
+    return (
+      <FormInputField
+        label="Mejl"
+        name="email"
+        options={{
+          pattern: {
+            value: EMAIL_REGEX,
+            message: "Felaktig mejladress.",
+          },
+          required: {
+            value: true,
+            message: "Du måste ange en mejladress.",
+          },
+        }}
+        className="w-full grow"
+      />
+    );
+  }
+
+  function NameField() {
+    return (
+      <FormInputField
+        label={`Förnamn "Nick" Efternamn`}
+        name="name"
+        options={{
+          pattern: {
+            value: NAME_REGEX,
+            message: "Namn måste vara i formatet 'Förnamn \"Nick\" Efternamn'.",
+          },
+          required: {
+            value: true,
+            message: "Du måste ange ditt namn.",
+          },
+        }}
+        className="w-full grow"
+      />
+    );
+  }
+
+  function parseName(name: string) {
+    const [firstName, nickname, lastName] = name.split('"');
+    return {
+      nickname: nickname.trim(),
+      name: `${firstName.trim()} ${lastName.trim()}`,
+    };
+  }
+
   const [, executeMutation] = useMutation(ADD_REGISTRATION);
 
-  const { register, handleSubmit, formState, reset } =
-    useForm<RegistrationFormType>({
-      mode: "onTouched",
-    });
+  const formContext = useForm<RegistrationFormType>({
+    mode: "onTouched",
+  });
 
-  const formProps = {
-    register,
-    state: formState,
-  };
-
-  const { errors } = formState;
+  const {
+    handleSubmit,
+    formState: { isValid },
+    reset,
+  } = formContext;
 
   useEffect(() => reset(), []);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mt-8 grid grid-cols-2 gap-8">
-        <div className="hidden col-span-2">
-          <FormErrors errors={errors} />
-        </div>
-        <div className="col-span-2 flex flex-col gap-8 sm:flex-col lg:col-span-1 lg:row-span-2">
-          <div className="flex flex-col xl:flex-row gap-8">
-            <NameField {...formProps} />
-            <EmailField {...formProps} />
-          </div>
-          <div className="flex flex-col gap-8 xl:w-1/2">
-            <SubmitFormButton
-              value="Anmäl mig!"
-              disabled={!formState.isValid}
-            />
-            <div className="hidden lg:block">
-              <FormErrors errors={errors} />
+    <FormProvider {...formContext}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="grid grid-cols-2 gap-8">
+          <div className="col-span-2 flex flex-col gap-8 sm:flex-col lg:col-span-1 lg:row-span-2 3xl:col-span-2">
+            <div className="flex flex-col gap-8 xl:flex-row">
+              <NameField />
+              <EmailField />
+            </div>
+            <div className="hidden grid-cols-1 gap-8 lg:grid xl:grid-cols-2">
+              <SubmitFormButton value="Anmäl mig!" disabled={!isValid} />
+              <div className="hidden overflow-y-auto lg:block 3xl:h-[8rem]">
+                <FormErrors />
+              </div>
             </div>
           </div>
+          <div className="col-span-2 flex flex-col gap-8 lg:col-span-1 lg:row-span-2 3xl:col-span-2">
+            <WithLabel label="GDPR*">
+              <PrivacyPolicy agreement={agreement} />
+            </WithLabel>
+          </div>
         </div>
-        <div className="col-span-2 flex flex-col gap-8 lg:col-span-1 lg:row-span-2">
-          <WithLabel label="GDPR*">
-            <PrivacyPolicy {...formProps} agreement={agreement} />
-          </WithLabel>
+        <div className="col-span-2 mt-8 lg:hidden">
+          <SubmitFormButton value="Anmäl mig!" disabled={!isValid} />
+          <div className="mt-8">
+            <FormErrors />
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </FormProvider>
   );
 }
 
-function EmailField(props: Pick<FormInputFieldProps, "register" | "state">) {
-  return (
-    <FormInputField
-      {...props}
-      label="Mejl"
-      name="email"
-      options={{
-        pattern: {
-          value: EMAIL_REGEX,
-          message: "Felaktig mejladress.",
-        },
-        required: {
-          value: true,
-          message: "Du måste ange en mejladress.",
-        },
-      }}
-      className="w-full grow"
-    />
-  );
-}
+export type RegistrationFormType = Pick<UserIdentity, "name" | "email"> & {
+  gdpr: boolean;
+};
 
-function NameField(props: Pick<FormInputFieldProps, "register" | "state">) {
-  return (
-    <FormInputField
-      {...props}
-      label={`Förnamn "Nick" Efternamn`}
-      name="name"
-      options={{
-        pattern: {
-          value: NAME_REGEX,
-          message: "Namn måste vara i formatet 'Förnamn \"Nick\" Efternamn'.",
-        },
-        required: {
-          value: true,
-          message: "Du måste ange ditt namn.",
-        },
-      }}
-      className="w-full grow"
-    />
-  );
-}
-
-function parseName(name: string) {
-  const [firstName, nickname, lastName] = name.split('"');
-  return {
-    nickname: nickname.trim(),
-    name: `${firstName.trim()} ${lastName.trim()}`,
-  };
-}
+export const EMAIL_REGEX =
+  /[a-zA-Z]([_.-]?[a-zA-Z])*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/;
+export const NAME_REGEX = /[^"]+\s"[^"]+"\s[^"]+/;
 
 const agreement: DataPrivacyAgreement = {
   dataGathered: [
@@ -144,6 +146,10 @@ const agreement: DataPrivacyAgreement = {
     {
       name: "ArmIT",
       email: "armit@chalmers.it",
+    },
+    {
+      name: "StyrIT",
+      email: "styrit@chalmers.it",
     },
   ],
   lastDeletion: new Date(),

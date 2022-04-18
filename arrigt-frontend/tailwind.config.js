@@ -1,6 +1,11 @@
 module.exports = {
   content: ["pages/**/*.tsx", "src/**/*.tsx"],
   theme: {
+    extend: {
+      screens: {
+        "3xl": "2000px",
+      }
+    },
     colors: ({ colors: { emerald, red } }) => ({
       emerald,
       red,
@@ -32,11 +37,11 @@ module.exports = {
       },
       transparent: "transparent",
       intent: {
-        "0": "var(--intent-color-0)",
-        "100": "var(--intent-color-100)",
-        "300": "var(--intent-color-300)",
-        "500": "var(--intent-color-500)",
-        "700": "var(--intent-color-700)",
+        0: "var(--intent-color-0)",
+        100: "var(--intent-color-100)",
+        300: "var(--intent-color-300)",
+        500: "var(--intent-color-500)",
+        700: "var(--intent-color-700)",
         "focus-300": "var(--intent-color-focus-300)",
         "focus-500": "var(--intent-color-focus-500)",
         "focus-700": "var(--intent-color-focus-700)",
@@ -52,7 +57,7 @@ module.exports = {
       base: "1rem",
       md: "1.25rem",
       lg: "2rem",
-      xl: "3rem"
+      xl: "3rem",
     },
     fontWeight: {
       regular: 400,
@@ -61,5 +66,4 @@ module.exports = {
       bold: 700,
     },
   },
-  plugins: [],
 };

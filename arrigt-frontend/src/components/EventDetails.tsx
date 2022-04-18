@@ -43,7 +43,7 @@ function Poster() {
     <div>
       <img
         src={imagePath}
-        className="max-h-[90vh] rounded-lg lg:max-h-[32rem] lg:max-w-screen-sm"
+        className="max-h-[90vh] rounded-lg lg:max-h-[40rem] lg:max-w-screen-sm"
       />
     </div>
   );
