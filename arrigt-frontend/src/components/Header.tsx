@@ -9,7 +9,7 @@ export function Header() {
         <Wordmark />
       </div>
       <nav className="flex flex-row place-items-center gap-8">
-        <Link href="/">Arret</Link>
+        <Link href="/event">Arret</Link>
         <Link href="/registrations">Registrations</Link>
       </nav>
     </div>

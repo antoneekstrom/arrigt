@@ -2,7 +2,7 @@ import { gql, TypedDocumentNode, useQuery, UseQueryState } from "urql";
 import { Registration } from "arrigt-backend/src/model";
 import { EventObjectType } from "arrigt-backend/src/graphql/schema/types/Event";
 import { FormInputField } from "../src/components/InputField";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 
 type RegistrationsData = {
   registrations: Registration[];
@@ -49,11 +49,12 @@ const GET_EVENTS_QUERY: TypedDocumentNode<EventsData> = gql`
 `;
 
 export default function Registrations() {
-  const { register, formState, handleSubmit, setValue, getValues, trigger } =
-    useForm<FormType>({
-      mode: "onChange",
-      reValidateMode: "onChange",
-    });
+  const formContext = useForm<FormType>({
+    mode: "onChange",
+    reValidateMode: "onChange",
+  });
+
+  const { handleSubmit, setValue, getValues, trigger } = formContext;
 
   const [{ data, fetching, error }] = useQuery({
     query: GET_EVENTS_QUERY,
@@ -81,20 +82,20 @@ export default function Registrations() {
   return (
     <div>
       <div>
-        <form onSubmit={handleSubmit(() => reexecuteGetRegistrations())}>
-          <FormInputField
-            label="Event ID"
-            name="eventId"
-            register={register}
-            state={formState}
-            options={{
-              validate: {
-                eventIdExists: (value) =>
-                  eventIds.includes(value) || "Invalid event id",
-              },
-            }}
-          />
-        </form>
+        <FormProvider {...formContext}>
+          <form onSubmit={handleSubmit(() => reexecuteGetRegistrations())}>
+            <FormInputField
+              label="Event ID"
+              name="eventId"
+              options={{
+                validate: {
+                  eventIdExists: (value) =>
+                    eventIds.includes(value) || "Invalid event id",
+                },
+              }}
+            />
+          </form>
+        </FormProvider>
       </div>
       <div className="mt-8">
         <RegistrationsResult

@@ -1,5 +1,5 @@
 import { SubmitFormButton } from "./Button";
-import { FormInputField, FormInputFieldProps } from "./InputField";
+import { FormInputField } from "./InputField";
 import { FormProvider, useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useMutation } from "urql";
@@ -12,7 +12,7 @@ import { ADD_REGISTRATION } from "../graphql/queries";
 
 export function RegistrationForm() {
   async function onSubmit({ name, email, gdpr }: RegistrationFormType) {
-    await executeMutation({
+    const result = await executeMutation({
       eventId: "kursenkatsfika",
       userIdentity: {
         email,
@@ -25,7 +25,13 @@ export function RegistrationForm() {
         },
       },
     });
-    window.location.href = "/registered";
+
+    if (result.error) {
+      console.error(result.error);
+    }
+    else {
+      window.location.href = "/registered";
+    }
   }
 
   function EmailField() {

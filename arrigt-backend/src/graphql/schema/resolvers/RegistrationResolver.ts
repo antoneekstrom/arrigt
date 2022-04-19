@@ -46,6 +46,9 @@ export class DataPrivacyAgreementInput
 
   @Field()
   lastDeletion!: Date;
+
+  @Field((type) => [PartyObjectType], { nullable: true })
+  sharedWith?: PartyObjectType[];
 }
 
 @InputType()
