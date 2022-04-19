@@ -8,8 +8,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ClientProvider>
       <Head>
-        <title>App</title>
-        <link rel="icon" href="/favicon.jpg" />
+        <title>Kursenkätsfika - arrIgT</title>
+        <link rel="icon" href="favicon.svg" />
       </Head>
       <Page>
         <Component {...pageProps} />

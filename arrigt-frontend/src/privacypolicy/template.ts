@@ -14,7 +14,7 @@ export function agreementTemplate(
   return [
     intro(agreement, event),
     data(agreement),
-    shared(agreement),
+    ...shared(agreement),
     statistics(agreement),
     photos(),
     rights(),
@@ -47,13 +47,11 @@ function data({ dataGathered }: DataPrivacyAgreement) {
 }
 
 function shared({ sharedWith }: DataPrivacyAgreement) {
-  return (sharedWith ?? [])
-    .map(
-      ({ name, email, phone, adress }) => `
+  return (sharedWith ?? []).map(
+    ({ name, email, phone, adress }) => `
       The data may be shared with ${name} (${email}).
     `
-    )
-    .join("\n");
+  );
 }
 
 function statistics({ collectStatistics }: DataPrivacyAgreement) {

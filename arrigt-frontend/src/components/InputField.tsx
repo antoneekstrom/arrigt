@@ -1,5 +1,13 @@
 import { forwardRef, HTMLProps, PropsWithChildren } from "react";
-import { FormState, RegisterOptions, UseFormRegister } from "react-hook-form";
+import {
+  FieldValues,
+  FormState,
+  RegisterOptions,
+  useFormContext,
+  UseFormRegister,
+  UseFormReturn,
+  useFormState,
+} from "react-hook-form";
 import { Card } from "./Card";
 import { WithLabel } from "./Label";
 import { MessageBox } from "./MessageBox";
@@ -15,8 +23,6 @@ export type FormInputFieldProps = Omit<
   InputFieldProps,
   "classNameWrapper" | "icon"
 > & {
-  register: UseFormRegister<any>;
-  state: FormState<any>;
   options?: RegisterOptions<any>;
   name: string;
 };
@@ -31,7 +37,7 @@ export function FormInputFieldWithMessageBox({
   return (
     <div className={className}>
       <FormInputField {...props} />
-      <ValidationMessageBox>{getErrorMessage(props)}</ValidationMessageBox>
+      <ValidationMessageBox>{useErrorMessage(props.name)}</ValidationMessageBox>
     </div>
   );
 }
@@ -43,14 +49,18 @@ export function FormInputField({ ...props }: FormInputFieldProps) {
   const isRequired = props.options?.required;
   const label = `${props.label}${isRequired ? "*" : ""}`;
 
+  const registerWithProps = useRegisterWithProps(props);
+  const errorMessage = useErrorMessage(props.name);
+  const isTouched = useIsFieldTouched(props.name);
+
   return (
     <InputField
       {...props}
-      {...registerWithProps(props)}
+      {...registerWithProps()}
       label={label}
-      icon={getInputStateIcon(props)}
-      message={getErrorMessage(props)}
-      className={getInputStateIntent(props)}
+      icon={getInputStateIcon(errorMessage, isTouched)}
+      message={errorMessage}
+      className={getInputStateIntent(errorMessage, isTouched)}
     />
   );
 }
@@ -70,7 +80,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             <input
               {...props}
               ref={ref}
-              className="w-full bg-transparent py-3 pl-6 pr-3 text-intent-700 outline-none caret-intent-700"
+              className="w-full bg-transparent py-3 pl-6 pr-3 text-intent-700 caret-intent-700 outline-none"
               id={label}
             />
             {icon}
@@ -92,35 +102,40 @@ export function ValidationMessageBox({ children }: PropsWithChildren<unknown>) {
   );
 }
 
-function getErrorMessage({ name, state: { errors } }: FormInputFieldProps) {
+function useErrorMessage(name: string) {
+  const { errors } = useFormState();
+
   return errors[name]?.message;
 }
 
-function isFieldTouched({
-  name,
-  state: { touchedFields },
-}: FormInputFieldProps) {
+function useIsFieldTouched(name: string) {
+  const { touchedFields } = useFormState();
   return touchedFields[name];
 }
 
-function getInputStateIntent(props: FormInputFieldProps) {
-  if (getErrorMessage(props)) {
+export function useInputStateIntent(name: string) {
+  return getInputStateIntent(useErrorMessage(name), useIsFieldTouched(name));
+}
+
+export function getInputStateIntent(errorMessage: boolean, touched: boolean) {
+  if (errorMessage) {
     return "intent-error";
-  } else if (isFieldTouched(props)) {
+  } else if (touched) {
     return "intent-primary";
   }
   return "intent-neutral";
 }
 
-function getInputStateIcon(props: FormInputFieldProps) {
-  if (getErrorMessage(props)) {
+function getInputStateIcon(errorMessage: boolean, touched: boolean) {
+  if (errorMessage) {
     return <IconError />;
-  } else if (isFieldTouched(props)) {
+  } else if (touched) {
     return <IconValid />;
   }
   return <IconEmpty />;
 }
 
-function registerWithProps({ register, name, options }: FormInputFieldProps) {
-  return register(name, options);
+function useRegisterWithProps({ name, options }: FormInputFieldProps) {
+  const { register } = useFormContext();
+  return () => register(name, options);
 }
