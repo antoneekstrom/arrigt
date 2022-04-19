@@ -1,12 +1,41 @@
 version: "3"
 
 services:
+  db:
+    image: mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: plupp
+      MONGO_INITDB_ROOT_PASSWORD: plupp
+      MONGO_INITDB_DATABASE: plupp
+  mongo-express:
+    image: mongo-express
+    restart: unless-stopped
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: plupp
+      ME_CONFIG_MONGODB_ADMINPASSWORD: plupp
+      ME_CONFIG_MONGODB_URL: mongodb://plupp:plupp@db:27017/
   frontend:
+    restart: unless-stopped
     build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
+      context: ./
+      dockerfile: ./arrigt-frontend/Dockerfile.dev
     ports:
       - 3000:3000
     volumes:
-      - ./pages:/app/pages
-      - ./src:/app/src
+      - ./arrigt-frontend:/arrigt-frontend
+      - /arrigt-frontend/node_modules
+  backend:
+    restart: unless-stopped
+    build:
+      context: ./arrigt-backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3001:3000
+    volumes:
+      - ./arrigt-backend:/app
+      - /app/node_modules
+    depends_on:
+      - db

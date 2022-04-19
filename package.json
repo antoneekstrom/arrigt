@@ -1,0 +1,11 @@
+{
+  "name": "arrigt",
+  "repository": "https://github.com/antoneekstrom/arrigt",
+  "author": "Anton Ekström <anton.e.ekstrom@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "arrigt-frontend",
+    "arrigt-backend"
+  ]
+}
