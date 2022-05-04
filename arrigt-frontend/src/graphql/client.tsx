@@ -5,7 +5,7 @@ export const client = createClient({
   url: "http://localhost:3001/graphql",
   fetchOptions: {
     credentials: "include",
-  }
+  },
 });
 
 export const ClientProvider = ({ children }: PropsWithChildren<unknown>) => (

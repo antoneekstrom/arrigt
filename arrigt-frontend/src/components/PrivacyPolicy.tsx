@@ -1,16 +1,16 @@
 import { DataPrivacyAgreement } from "arrigt-backend/src/model/privacypolicy";
-import { useFormContext, UseFormRegister, useFormState } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { agreementTemplate } from "../privacypolicy/template";
 import { Card } from "./Card";
 import { Checkbox } from "./Checkbox";
-import { getInputStateIntent, useInputStateIntent } from "./InputField";
+import { useInputStateIntent } from "./InputField";
 
 export type PrivacyPolicyProps = {
   agreement: DataPrivacyAgreement;
 };
 
 export function PrivacyPolicy({ agreement }: PrivacyPolicyProps) {
-  const { register } = useFormContext();
+  const { register, trigger, setValue } = useFormContext();
   const intent = useInputStateIntent("gdpr");
 
   return (
@@ -20,7 +20,9 @@ export function PrivacyPolicy({ agreement }: PrivacyPolicyProps) {
         {agreementTemplate(agreement)
           .filter((paragraph) => paragraph.length > 0)
           .map((paragraph) => (
-            <p className="text-sm">{paragraph}</p>
+            <p className="text-sm" key={paragraph}>
+              {paragraph}
+            </p>
           ))}
       </div>
       <div className="mt-6">

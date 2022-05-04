@@ -1,4 +1,4 @@
-import { AddRegistrationInput } from "arrigt-backend/src/graphql/schema/resolvers/RegistrationResolver";
+import { AddRegistrationInput } from "arrigt-backend/src/graphql/schema/inputs";
 import { Registration } from "arrigt-backend/src/model";
 import { TypedDocumentNode, gql } from "urql";
 
