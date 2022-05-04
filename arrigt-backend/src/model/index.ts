@@ -1,12 +1,21 @@
-import { GDPR } from "./privacypolicy";
+import { DataPrivacyAgreement, GDPR, Party } from "./privacypolicy";
 
 /**
  * An event.
  */
 export type Event = {
   id: string;
-  name?: string;
-  date?: Date;
+  title: string;
+  date: Date;
+  description: string[];
+  location?: string;
+  imageUrl?: string;
+  responsible: EventResponsible;
+  agreement: DataPrivacyAgreement;
+};
+
+export type EventResponsible = Party & {
+  iconUrl: string;
 };
 
 /**
