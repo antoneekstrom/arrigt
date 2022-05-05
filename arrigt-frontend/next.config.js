@@ -9,4 +9,18 @@ module.exports = {
     };
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/events",
+        permanent: true,
+      },
+      {
+        source: "/event",
+        destination: "/events",
+        permanent: true
+      }
+    ];
+  },
 };

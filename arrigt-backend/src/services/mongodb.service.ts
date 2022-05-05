@@ -6,7 +6,9 @@ import { Service } from "typedi";
  */
 @Service()
 export class MongoDbService {
-  constructor(private client = MongoDbService.createClient()) {}
+  constructor(private client = MongoDbService.createClient()) {
+    client.connect();
+  }
 
   static getUri() {
     return "mongodb://plupp:plupp@db:27017";
@@ -20,16 +22,9 @@ export class MongoDbService {
     collectionName: string,
     fn: (collection: Collection<T>) => Promise<R>
   ) {
-    let result;
-    try {
-      await this.client.connect();
-      const db = this.client.db("plupp");
-      const collection = db.collection<T>(collectionName);
-      result = await fn(collection);
-    } finally {
-      await this.client.close();
-    }
-    return result;
+    const db = this.client.db("plupp");
+    const collection = db.collection<T>(collectionName);
+    return await fn(collection);
   }
 
   getClient() {

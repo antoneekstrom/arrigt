@@ -8,7 +8,9 @@ export function FormErrors() {
   return (
     <div className="flex min-h-[8rem] flex-col gap-2 overflow-y-auto ">
       {messages.map((message) => (
-        <MessageBox className="intent-error">{message}</MessageBox>
+        <MessageBox key={message} className="intent-error">
+          {message}
+        </MessageBox>
       ))}
     </div>
   );

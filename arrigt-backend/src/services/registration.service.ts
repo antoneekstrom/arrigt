@@ -8,10 +8,10 @@ import { MongoDbService } from "./mongodb.service";
  */
 @Service()
 export class RegistrationService {
-  constructor(private dbService: MongoDbService) {}
+  constructor(private db: MongoDbService) {}
 
   async getAllRegistrations(): Promise<Registration[]> {
-    return this.dbService.useCollection<Registration, Registration[]>(
+    return this.db.useCollection<Registration, Registration[]>(
       "registrations",
       async (collection) => {
         return await collection.find().toArray();
@@ -20,7 +20,7 @@ export class RegistrationService {
   }
 
   async getRegistrationsByEventId(eventId: string): Promise<Registration[]> {
-    return this.dbService.useCollection<Registration, Registration[]>(
+    return this.db.useCollection<Registration, Registration[]>(
       "registrations",
       async (collection) => {
         return await collection
@@ -33,11 +33,11 @@ export class RegistrationService {
   }
 
   async addRegistration(registration: Registration) {
-    return this.dbService.useCollection<
-      Registration,
-      InsertOneResult<Registration>
-    >("registrations", async (collection) => {
-      return await collection.insertOne(registration);
-    });
+    return this.db.useCollection<Registration, InsertOneResult<Registration>>(
+      "registrations",
+      async (collection) => {
+        return await collection.insertOne(registration);
+      }
+    );
   }
 }
