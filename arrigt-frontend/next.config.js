@@ -14,13 +14,13 @@ module.exports = {
       {
         source: "/",
         destination: "/events",
-        permanent: true,
+        permanent: false,
       },
       {
         source: "/event",
         destination: "/events",
-        permanent: true
-      }
+        permanent: false,
+      },
     ];
   },
 };

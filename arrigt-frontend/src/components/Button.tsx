@@ -1,21 +1,18 @@
 import { Card } from "./Card";
 
-type BaseProps = {
-  primary?: boolean;
-};
+type BaseProps = unknown;
 
 export type CardButtonProps = React.HTMLAttributes<HTMLButtonElement> &
   BaseProps;
 
 export type CardSubmitButtonProps = React.HTMLProps<HTMLInputElement> &
-  Omit<BaseProps, "primary"> & {
+  BaseProps & {
     disabled?: boolean;
   };
 
 export function Button({
   children,
   className,
-  primary,
   ...props
 }: CardButtonProps) {
   return (

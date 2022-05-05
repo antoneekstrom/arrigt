@@ -1,11 +1,7 @@
 import { forwardRef, HTMLProps, PropsWithChildren } from "react";
 import {
-  FieldValues,
-  FormState,
   RegisterOptions,
   useFormContext,
-  UseFormRegister,
-  UseFormReturn,
   useFormState,
 } from "react-hook-form";
 import { Card } from "./Card";
@@ -23,7 +19,7 @@ export type FormInputFieldProps = Omit<
   InputFieldProps,
   "classNameWrapper" | "icon"
 > & {
-  options?: RegisterOptions<any>;
+  options?: RegisterOptions<Record<string, string>>;
   name: string;
 };
 
@@ -69,7 +65,7 @@ export function FormInputField({ ...props }: FormInputFieldProps) {
  * An input field.
  */
 export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
-  ({ label, className, icon, message, ...props }, ref) => {
+  function InputField({ label, className, icon, ...props }, ref) {
     return (
       <WithLabel
         htmlFor={label}

@@ -10,7 +10,7 @@ export type PrivacyPolicyProps = {
 };
 
 export function PrivacyPolicy({ agreement }: PrivacyPolicyProps) {
-  const { register, trigger, setValue } = useFormContext();
+  const { register } = useFormContext();
   const intent = useInputStateIntent("gdpr");
 
   return (
