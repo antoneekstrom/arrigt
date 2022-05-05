@@ -19,8 +19,8 @@ export function EventDetails({ event, fetching }: EventDetailsProps) {
   function TextContent() {
     return fetching ? (
       <div className="flex flex-col gap-8">
-        <LoadingBox className="h-[60px] w-[35vw]" />
-        <LoadingBox className="h-[400px] w-[50vw]" />
+        <LoadingBox className="h-[60px] w-full lg:w-[35vw]" />
+        <LoadingBox className="h-[400px] w-full lg:w-[50vw]" />
       </div>
     ) : (
       <div className="grow-[3] basis-0">
