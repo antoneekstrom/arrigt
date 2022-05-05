@@ -68,7 +68,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         htmlFor={label}
         label={label}
         className={`${className} relative w-full`}>
-        <div className={disabled ? "intent-disabled" : ""}>
+        <div className={disabled ? "intent-disabled-full" : ""}>
           <Card focus classNameAll={"w-full"}>
             <div className="flex w-full flex-row place-items-center justify-between pr-3">
               <input
