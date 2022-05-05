@@ -8,11 +8,17 @@ export function EventListItem({
   event: { title, description, id, imageUrl, date, responsible },
 }: EventListItemProps) {
   return (
-    <div className="flex flex-col gap-12 rounded-lg bg-gray-0 px-8 py-8 md:flex-row">
+    <div className="flex flex-col gap-12 rounded-lg bg-gray-0 px-8 py-8 lg:flex-row">
       <a
         href={`/event/${id}`}
-        className="grid h-full max-w-[50vw] place-items-center md:max-w-[200px]">
-        <img src={imageUrl} alt="Image of the event." height={300} width={300} />
+        className="flex lg:h-[200px] lg:w-[300px] flex-col place-items-center">
+        <img
+          src={imageUrl}
+          alt="Image of the event."
+          height={300}
+          width={300}
+          className="h-full w-auto max-w-[50vw] lg:max-h-[300px] lg:max-w-[300px]"
+        />
       </a>
       <div className="flex grow-[10] basis-0 flex-col gap-2">
         <a href={`/event/${id}`}>
@@ -25,7 +31,8 @@ export function EventListItem({
                 src={responsible?.iconUrl}
                 alt="Responsible party icon."
                 className="h-8 w-8"
-                width={32} height={32}
+                width={32}
+                height={32}
               />
             )}
             <span className="font-medium">{responsible?.name}</span>

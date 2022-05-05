@@ -24,3 +24,7 @@ export function WithLabel({ children, className, label, htmlFor }: WithLabelProp
     </div>
   );
 }
+
+export function NoLabel({ children, className }: PropsWithChildren<{ className?: string }>) {
+  return <div className={`${className} mt-8`}>{children}</div>;
+}

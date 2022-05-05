@@ -10,11 +10,7 @@ export type CardSubmitButtonProps = React.HTMLProps<HTMLInputElement> &
     disabled?: boolean;
   };
 
-export function Button({
-  children,
-  className,
-  ...props
-}: CardButtonProps) {
+export function Button({ children, className, ...props }: CardButtonProps) {
   return (
     <Card>
       <button
