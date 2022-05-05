@@ -30,18 +30,12 @@ export default function Events() {
 
   return (
     <div>
-      <ul className="flex flex-col gap-8">
+      <ul className="flex w-full flex-col gap-8">
         {fetching ? (
           <>
-            <div className="h-[200px] w-full">
-              <LoadingBox />
-            </div>
-            <div className="h-[200px] w-full">
-              <LoadingBox />
-            </div>
-            <div className="h-[200px] w-full">
-              <LoadingBox />
-            </div>
+            <LoadingBox className="h-[250px] w-full" />
+            <LoadingBox className="h-[250px] w-full" />
+            <LoadingBox className="h-[250px] w-full" />
           </>
         ) : (
           data?.events.map((event) => (

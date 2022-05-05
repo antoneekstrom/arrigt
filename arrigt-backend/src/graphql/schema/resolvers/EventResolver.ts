@@ -69,6 +69,8 @@ export class EventResolver {
    */
   @Query((of) => EventObjectType)
   async event(@Arg("id") id: string) {
+    // timeout to simulate a slow query
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     return await this.eventService.getEvent(id);
   }
 
@@ -83,6 +85,7 @@ export class EventResolver {
     description: "Returns all events which there are registrations for.",
   })
   async events() {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     return await this.eventService.getEvents();
   }
 

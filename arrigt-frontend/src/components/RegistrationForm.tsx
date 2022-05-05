@@ -8,9 +8,12 @@ import { FormErrors } from "./FormErrors";
 import { PrivacyPolicy } from "./PrivacyPolicy";
 import { NoLabel, WithLabel } from "./Label";
 import { ADD_REGISTRATION } from "../graphql/queries";
+import { LoadingBox } from "./LoadingBox";
+import { Card } from "./Card";
 
 export type RegistrationFormProps = {
-  event: Pick<Event, "agreement" | "id">;
+  event: Partial<Pick<Event, "agreement" | "id">>;
+  fetching?: boolean;
 };
 
 export type RegistrationFormType = Pick<UserIdentity, "name" | "email"> & {
@@ -19,15 +22,13 @@ export type RegistrationFormType = Pick<UserIdentity, "name" | "email"> & {
 
 export function RegistrationForm({
   event: { agreement, id: eventId },
+  fetching,
 }: RegistrationFormProps) {
   const formContext = useFormContext();
   const submitRegistration = useSubmitRegistration();
 
   const onSubmit = async ({ name, email, gdpr }: RegistrationFormType) =>
-    submitRegistration(eventId, name, email, gdpr);
-
-  // For debugging
-  useEffect(() => formContext.reset(), [formContext]);
+    submitRegistration(eventId ?? "", name, email, gdpr);
 
   return (
     <FormProvider {...formContext}>
@@ -39,7 +40,13 @@ export function RegistrationForm({
             <FormErrors className="hidden lg:block" />
           </div>
           <WithLabel label="GDPR*" className="lg:col-start-2 lg:row-start-1">
-            <PrivacyPolicy agreement={agreement} />
+            {fetching || !agreement ? (
+              <Card classNameAll="w-full h-full">
+                <LoadingBox className="h-full min-h-[300px] w-full" />
+              </Card>
+            ) : (
+              <PrivacyPolicy agreement={agreement} />
+            )}
           </WithLabel>
           <NoLabel className="flex flex-col gap-8 lg:col-start-2">
             <SubmitFormButton
@@ -52,98 +59,100 @@ export function RegistrationForm({
       </form>
     </FormProvider>
   );
-}
 
-function useSubmitRegistration() {
-  const addRegistrationMutation = useAddRegistrationMutation();
-  return async function (
-    eventId: string,
-    name: string,
-    email: string,
-    gdpr: boolean
-  ) {
-    const result = await addRegistrationMutation({
-      eventId,
-      userIdentity: {
-        email,
-        ...parseName(name),
-      },
-      userData: {
-        gdpr: {
-          accepted: gdpr,
+  function useSubmitRegistration() {
+    const addRegistrationMutation = useAddRegistrationMutation();
+    return async function (
+      eventId: string,
+      name: string,
+      email: string,
+      gdpr: boolean
+    ) {
+      const result = await addRegistrationMutation({
+        eventId,
+        userIdentity: {
+          email,
+          ...parseName(name),
         },
-      },
+        userData: {
+          gdpr: {
+            accepted: gdpr,
+          },
+        },
+      });
+
+      if (!result.error) {
+        redirectToRegisteredPage();
+      }
+    };
+  }
+
+  function redirectToRegisteredPage() {
+    window.location.href = "/registered";
+  }
+
+  function useAddRegistrationMutation() {
+    const [, executeMutation] = useMutation(ADD_REGISTRATION);
+    return executeMutation;
+  }
+
+  function useFormContext() {
+    return useForm<RegistrationFormType>({
+      mode: "onTouched",
     });
+  }
 
-    if (!result.error) {
-      redirectToRegisteredPage();
-    }
-  };
-}
+  function parseName(name: string) {
+    const [firstName, nickname, lastName] = name.split('"');
+    return {
+      nickname: nickname.trim(),
+      name: `${firstName.trim()} ${lastName.trim()}`,
+    };
+  }
 
-function redirectToRegisteredPage() {
-  window.location.href = "/registered";
-}
+  function EmailField() {
+    const EMAIL_REGEX =
+      /[a-zA-Z]([_.-]?[a-zA-Z])*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/;
+    return (
+      <FormInputField
+        disabled={fetching}
+        label="Mejl"
+        name="email"
+        options={{
+          pattern: {
+            value: EMAIL_REGEX,
+            message: "Felaktig mejladress.",
+          },
+          required: {
+            value: true,
+            message: "Du måste ange en mejladress.",
+          },
+        }}
+        className="w-full grow"
+      />
+    );
+  }
 
-function useAddRegistrationMutation() {
-  const [, executeMutation] = useMutation(ADD_REGISTRATION);
-  return executeMutation;
-}
+  function NameField() {
+    const NAME_REGEX = /[^"]+\s"[^"]+"\s[^"]+/;
 
-function useFormContext() {
-  return useForm<RegistrationFormType>({
-    mode: "onTouched",
-  });
-}
-
-function parseName(name: string) {
-  const [firstName, nickname, lastName] = name.split('"');
-  return {
-    nickname: nickname.trim(),
-    name: `${firstName.trim()} ${lastName.trim()}`,
-  };
-}
-
-function EmailField() {
-  const EMAIL_REGEX =
-    /[a-zA-Z]([_.-]?[a-zA-Z])*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/;
-  return (
-    <FormInputField
-      label="Mejl"
-      name="email"
-      options={{
-        pattern: {
-          value: EMAIL_REGEX,
-          message: "Felaktig mejladress.",
-        },
-        required: {
-          value: true,
-          message: "Du måste ange en mejladress.",
-        },
-      }}
-      className="w-full grow"
-    />
-  );
-}
-
-function NameField() {
-  const NAME_REGEX = /[^"]+\s"[^"]+"\s[^"]+/;
-
-  return (
-    <FormInputField
-      label={`Förnamn "Nick" Efternamn`}
-      name="name"
-      options={{
-        pattern: {
-          value: NAME_REGEX,
-          message: "Namn måste vara i formatet 'Förnamn \"Nick\" Efternamn'.",
-        },
-        required: {
-          value: true,
-          message: "Du måste ange ditt namn.",
-        },
-      }}
-      className="w-full grow"
-    />
-  );
+    return (
+      <FormInputField
+        disabled={fetching}
+        label={`Förnamn "Nick" Efternamn`}
+        name="name"
+        options={{
+          pattern: {
+            value: NAME_REGEX,
+            message: "Namn måste vara i formatet 'Förnamn \"Nick\" Efternamn'.",
+          },
+          required: {
+            value: true,
+            message: "Du måste ange ditt namn.",
+          },
+        }}
+        className="w-full grow"
+      />
+    );
+  }
 }

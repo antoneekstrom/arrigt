@@ -1,9 +1,5 @@
 import { forwardRef, HTMLProps, PropsWithChildren } from "react";
-import {
-  RegisterOptions,
-  useFormContext,
-  useFormState,
-} from "react-hook-form";
+import { RegisterOptions, useFormContext, useFormState } from "react-hook-form";
 import { Card } from "./Card";
 import { WithLabel } from "./Label";
 import { MessageBox } from "./MessageBox";
@@ -13,6 +9,7 @@ export type InputFieldProps = HTMLProps<HTMLInputElement> & {
   label: string;
   icon?: JSX.Element;
   message?: string;
+  disabled?: boolean;
 };
 
 export type FormInputFieldProps = Omit<
@@ -65,23 +62,25 @@ export function FormInputField({ ...props }: FormInputFieldProps) {
  * An input field.
  */
 export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
-  function InputField({ label, className, icon, ...props }, ref) {
+  function InputField({ label, className, icon, disabled, ...props }, ref) {
     return (
       <WithLabel
         htmlFor={label}
         label={label}
         className={`${className} relative w-full`}>
-        <Card focus classNameAll={"w-full"}>
-          <div className="flex w-full flex-row place-items-center justify-between pr-3">
-            <input
-              {...props}
-              ref={ref}
-              className="w-full bg-transparent py-3 pl-6 pr-3 text-intent-700 caret-intent-700 outline-none"
-              id={label}
-            />
-            {icon}
-          </div>
-        </Card>
+        <div className={disabled ? "intent-disabled" : ""}>
+          <Card focus classNameAll={"w-full"}>
+            <div className="flex w-full flex-row place-items-center justify-between pr-3">
+              <input
+                {...props}
+                ref={ref}
+                className="w-full bg-transparent py-3 pl-6 pr-3 text-intent-700 caret-intent-700 outline-none"
+                id={label}
+              />
+              {icon}
+            </div>
+          </Card>
+        </div>
       </WithLabel>
     );
   }

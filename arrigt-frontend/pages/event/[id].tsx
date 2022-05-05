@@ -2,6 +2,7 @@ import { Event } from "arrigt-backend/src/model";
 import { useRouter } from "next/router";
 import { gql, TypedDocumentNode, useQuery } from "urql";
 import { EventDetails } from "../../src/components/EventDetails";
+import { LoadingBox } from "../../src/components/LoadingBox";
 import { RegistrationForm } from "../../src/components/RegistrationForm";
 import { SubTitle } from "../../src/components/Subtitle";
 
@@ -48,22 +49,16 @@ export default function EventPage() {
   const eventId = useEventId();
   const { data, fetching } = useGetEventQuery();
 
-  if (fetching || !data) {
-    return <h1>loading</h1>;
-  }
-
-  const { event } = data;
+  const event = data?.event;
 
   return (
     <div className="flex flex-col gap-16">
       <div className="col-span-2">
-        <EventDetails event={event} />
+        <EventDetails event={event ?? {}} fetching={fetching} />
       </div>
       <div>
         <SubTitle>Anmälan</SubTitle>
-        {event && event.id && event.agreement && (
-          <RegistrationForm event={event} />
-        )}
+        <RegistrationForm event={event ?? {}} fetching={fetching} />
       </div>
     </div>
   );

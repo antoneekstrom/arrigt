@@ -11,7 +11,7 @@ export function EventListItem({
     <div className="flex flex-col gap-12 rounded-lg bg-gray-0 px-8 py-8 lg:flex-row">
       <a
         href={`/event/${id}`}
-        className="flex lg:h-[200px] lg:w-[300px] flex-col place-items-center">
+        className="flex flex-col place-items-center lg:h-[200px] lg:w-[300px]">
         <img
           src={imageUrl}
           alt="Image of the event."

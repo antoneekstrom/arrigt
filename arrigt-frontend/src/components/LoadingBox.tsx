@@ -1,7 +1,9 @@
-export function LoadingBox() {
+export function LoadingBox({ className }: { className?: string }) {
   return (
-    <div className="bg-gray-200/70 overflow-clip h-full w-full rounded-lg">
-      <div className="shimmer h-full w-full" />
+    <div className={className}>
+      <div className="h-full w-full overflow-clip rounded-lg bg-gray-200/70">
+        <div className="shimmer h-full w-full" />
+      </div>
     </div>
   );
 }
