@@ -28,6 +28,7 @@ function Poster({ imageUrl }: { imageUrl: string }) {
       <img
         src={`${imageUrl}`}
         className="max-h-[90vh] rounded-lg lg:max-h-[40rem] lg:max-w-screen-sm"
+        alt="Poster of the event."
       />
     </div>
   );

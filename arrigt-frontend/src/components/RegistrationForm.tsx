@@ -94,7 +94,7 @@ export function RegistrationForm() {
     reset,
   } = formContext;
 
-  useEffect(() => reset(), []);
+  useEffect(() => reset(), [ reset ]);
 
   return (
     <FormProvider {...formContext}>

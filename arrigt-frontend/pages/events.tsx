@@ -1,12 +1,10 @@
+import { Event } from "arrigt-backend/src/model";
 import { gql, TypedDocumentNode, useQuery } from "urql";
-import { Button } from "../src/components/Button";
-import { Card } from "../src/components/Card";
+import { EventListItem } from "../src/components/EventListItem";
+import { LoadingBox } from "../src/components/LoadingBox";
 
 type GetEventsQueryReturn = {
-  events: {
-    id: string;
-    title: string;
-  }[];
+  events: (Partial<Event> & Required<Pick<Event, "id">>)[];
 };
 
 const GET_EVENTS_QUERY: TypedDocumentNode<GetEventsQueryReturn> = gql`
@@ -14,25 +12,44 @@ const GET_EVENTS_QUERY: TypedDocumentNode<GetEventsQueryReturn> = gql`
     events {
       id
       title
+      imageUrl
+      description
+      date
+      responsible {
+        name
+        iconUrl
+      }
     }
   }
 `;
 
 export default function Events() {
-  const [{ data, fetching, error }] = useQuery({
+  const [{ data, fetching }] = useQuery({
     query: GET_EVENTS_QUERY,
   });
 
   return (
     <div>
-      <ul>
-        {data?.events.map(({ title, id }) => (
-          <li key={id}>
-            <a href={`/event/${id}`}>
-              <Button>{title}</Button>
-            </a>
-          </li>
-        ))}
+      <ul className="flex flex-col gap-8">
+        {fetching ? (
+          <>
+            <div className="h-[200px] w-full">
+              <LoadingBox />
+            </div>
+            <div className="h-[200px] w-full">
+              <LoadingBox />
+            </div>
+            <div className="h-[200px] w-full">
+              <LoadingBox />
+            </div>
+          </>
+        ) : (
+          data?.events.map((event) => (
+            <li key={event.id}>
+              <EventListItem event={event} />
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );

@@ -10,6 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>Kursenkätsfika - arrIgT</title>
         <link rel="icon" href="favicon.svg" />
+        <link rel="preconnect" href="http://localhost:3001" />
       </Head>
       <Page>
         <Component {...pageProps} />
