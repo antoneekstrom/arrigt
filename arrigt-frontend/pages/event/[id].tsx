@@ -6,7 +6,7 @@ import { RegistrationForm } from "../../src/components/RegistrationForm";
 import { SubTitle } from "../../src/components/Subtitle";
 
 type GetEventQueryReturn = {
-  event: Partial<Event>;
+  event: Pick<Event, "title" | "description" | "imageUrl" | "id" | "agreement">;
 };
 
 const GET_EVENT_QUERY: TypedDocumentNode<GetEventQueryReturn> = gql`
@@ -15,6 +15,28 @@ const GET_EVENT_QUERY: TypedDocumentNode<GetEventQueryReturn> = gql`
       title
       description
       imageUrl
+      id
+      agreement {
+        purpose
+        collectStatistics
+        lastDeletion
+        dataGathered {
+          description
+          usage
+        }
+        sharedWith {
+          name
+          email
+          organisation
+          contactInformation
+        }
+        responsible {
+          name
+          email
+          organisation
+          contactInformation
+        }
+      }
     }
   }
 `;
@@ -23,29 +45,40 @@ const GET_EVENT_QUERY: TypedDocumentNode<GetEventQueryReturn> = gql`
  * A page that shows the event information.
  */
 export default function EventPage() {
-  const { id: eventId } = useRouter().query;
-  const [{ data, fetching }] = useQuery({
-    query: GET_EVENT_QUERY,
-    variables: { eventId },
-  });
+  const eventId = useEventId();
+  const { data, fetching } = useGetEventQuery();
 
-  if (fetching) {
+  if (fetching || !data) {
     return <h1>loading</h1>;
   }
 
-  if (!data) {
-    return <h1>not found</h1>;
-  }
+  const { event } = data;
 
   return (
-    <div className="flex flex-col gap-16 3xl:grid 3xl:grid-cols-3 3xl:gap-32">
+    <div className="flex flex-col gap-16">
       <div className="col-span-2">
-        <EventDetails event={data.event} />
+        <EventDetails event={event} />
       </div>
       <div>
         <SubTitle>Anmälan</SubTitle>
-        <RegistrationForm />
+        {event && event.id && event.agreement && (
+          <RegistrationForm event={event} />
+        )}
       </div>
     </div>
   );
+
+  function useGetEventQuery() {
+    const [{ data, fetching }] = useQuery({
+      query: GET_EVENT_QUERY,
+      variables: { eventId },
+    });
+
+    return { data, fetching };
+  }
+
+  function useEventId() {
+    const { id } = useRouter().query;
+    return id;
+  }
 }

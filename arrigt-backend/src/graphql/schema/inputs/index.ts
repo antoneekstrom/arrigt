@@ -1,14 +1,11 @@
 import { Field, InputType } from "type-graphql";
-import { RegistrationObjectType } from "../types/Registration";
 import { UserIdentityObjectType } from "../types/UserIdentity";
-import { UserDataObjectType } from "../types/UserData";
 import {
   CollectedDataObjectType,
   DataPrivacyAgreementObjectType,
   GDPRObjectType,
   PartyObjectType,
 } from "../types/DataPrivacyAgreement";
-import { MealPreferenceObjectType } from "../types/MealPreference";
 import { Equals, ValidateNested } from "class-validator";
 import { EventObjectType } from "../types/Event";
 import { EventResponsibleObjectType } from "../types/EventResponsible";
@@ -112,19 +109,15 @@ export class DataPrivacyAgreementInput
 }
 
 @InputType()
-export class GdprInput implements GDPRObjectType {
+export class GdprInput implements Partial<GDPRObjectType> {
   @Field()
-  @Equals(true, { message: "You must accept the data privacy agreement" })
+  @Equals(true, { message: "You must accept the data privacy agreement." })
   accepted!: boolean;
-
-  @Field((type) => DataPrivacyAgreementInput)
-  @ValidateNested()
-  agreement!: DataPrivacyAgreementInput;
 }
+
 /**
  * Input type for the addRegistration mutation.
  */
-
 @InputType()
 export class UserIdentityInput implements UserIdentityObjectType {
   @Field()
@@ -135,35 +128,32 @@ export class UserIdentityInput implements UserIdentityObjectType {
 
   @Field({ nullable: true })
   nickname?: string;
-
-  @Field({ nullable: true })
-  id?: string;
 }
+
 /**
  * Input type for the addRegistration mutation.
  */
-
 @InputType()
-export class UserDataInput implements UserDataObjectType {
-  mealPreferences?: MealPreferenceObjectType[];
-
+export class UserDataInput {
   @Field((type) => GdprInput)
   @ValidateNested()
   gdpr!: GdprInput;
+
+  // mealPreferences?: MealPreferenceObjectType[];
 }
+
 /**
  * Input type for the addRegistration mutation.
  */
-
 @InputType()
-export class AddRegistrationInput implements RegistrationObjectType {
+export class AddRegistrationInput {
   @Field()
   eventId!: string;
 
   @Field((type) => UserIdentityInput)
   userIdentity!: UserIdentityInput;
 
-  @Field((type) => UserDataInput, { nullable: true })
+  @Field((type) => UserDataInput)
   @ValidateNested()
-  userData?: UserDataInput;
+  userData!: UserDataInput;
 }

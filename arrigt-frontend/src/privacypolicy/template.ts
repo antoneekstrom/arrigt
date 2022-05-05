@@ -32,7 +32,7 @@ function intro(
     event?.title ? " " + event.title : ""
   }${
     event?.date ? " on " + event.date : ""
-  }. The data will not be deleted later than ${lastDeletion.toDateString()}. ${purpose}
+  }. The data will not be deleted later than ${new Date(lastDeletion).toDateString()}. ${purpose}
   `;
 }
 

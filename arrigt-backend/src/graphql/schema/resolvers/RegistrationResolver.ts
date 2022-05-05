@@ -3,6 +3,7 @@ import { Service } from "typedi";
 import { RegistrationService } from "../../../services/registration.service";
 import { RegistrationObjectType } from "../types/Registration";
 import { AddRegistrationInput } from "../inputs";
+import { EventService } from "../../../services/event.service";
 
 /**
  *
@@ -11,7 +12,10 @@ import { AddRegistrationInput } from "../inputs";
 @Service()
 @Resolver((of) => RegistrationObjectType)
 export class RegistrationResolver {
-  constructor(private readonly registrationService: RegistrationService) {}
+  constructor(
+    private readonly registrationService: RegistrationService,
+    private readonly eventService: EventService
+  ) {}
 
   /**
    * Returns all registrations for the given event.
@@ -39,7 +43,21 @@ export class RegistrationResolver {
     @Arg("input")
     input: AddRegistrationInput
   ) {
-    await this.registrationService.addRegistration(input);
+    const event = await this.eventService.getEvent(input.eventId);
+
+    if (!event) {
+      throw new Error(`Event with id ${input.eventId} does not exist.`);
+    }
+
+    await this.registrationService.addRegistration({
+      ...input,
+      userData: {
+        gdpr: {
+          agreement: event.agreement,
+          accepted: input.userData.gdpr.accepted,
+        },
+      },
+    });
     return input;
   }
 }
