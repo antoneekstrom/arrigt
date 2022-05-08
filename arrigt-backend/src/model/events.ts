@@ -1,6 +1,7 @@
-import { Event, EventResponsible, Registration } from ".";
-import { EventObjectType } from "../graphql/schema/types/Event";
-import { DataPrivacyAgreement } from "./privacypolicy";
+import { DataPrivacyAgreement } from "../schema/types/DataPrivacyAgreement";
+import { Event } from "../schema/types/Event";
+import { EventResponsible } from "../schema/types/EventResponsible";
+import { Registration } from "../schema/types/Registration";
 
 /**
  * Returns all events which there are registrations for.
@@ -10,12 +11,12 @@ import { DataPrivacyAgreement } from "./privacypolicy";
  */
 export function mapRegistrationsToEvents(
   registrations: Registration[]
-): Partial<EventObjectType>[] {
+): Partial<Event>[] {
   // Add eventIds from the registrations to a set, to remove duplicates
   const eventIds = new Set(registrations.map(({ eventId }) => eventId));
 
   // Map the ids to event object types
-  const events: Partial<EventObjectType>[] = [...eventIds].map((id) => ({
+  const events: Partial<Event>[] = [...eventIds].map((id) => ({
     id,
   }));
 

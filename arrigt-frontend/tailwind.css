@@ -96,7 +96,7 @@
     --intent-color-focus-700: theme(colors.turquoise.700);
   }
   .intent-disabled {
-    --intent-color-0: theme(colors.gray.0);
+    --intent-color-0: theme(colors.gray.100);
     --intent-color-100: theme(colors.gray.300);
     --intent-color-300: theme(colors.gray.300);
     --intent-color-500: theme(colors.gray.500);
