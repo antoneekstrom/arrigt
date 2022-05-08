@@ -1,6 +1,6 @@
 import { Event } from "arrigt-backend/src/schema/types/Event";
 import { gql, TypedDocumentNode, useQuery, useSubscription } from "urql";
-import { EventListItem } from "../src/components/EventListItem";
+import { EventItem } from "../src/components/EventListItem";
 
 type GetEventsQueryReturn = {
   events: Event[];
@@ -66,7 +66,7 @@ export default function Events() {
   return (
     <div className="flex w-full flex-col gap-8">
       {events?.map((event) => (
-        <EventListItem event={event} key={event.id} />
+        <EventItem event={event} key={event.id} />
       ))}
     </div>
   );

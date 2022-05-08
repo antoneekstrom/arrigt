@@ -15,7 +15,7 @@ function createClient() {
   const webSocketClient =
     typeof window !== "undefined"
       ? createWebSocketClient({
-          url: "ws://localhost:3001/graphql",
+          url: GRAPHQL_ENDPOINT.replace(/^http/, "ws"),
         })
       : undefined;
 

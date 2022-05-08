@@ -4,7 +4,7 @@ export type EventListItemProps = {
   event: Partial<Event>;
 };
 
-export function EventListItem({
+export function EventItem({
   event: { title, description, id, imageUrl, date, responsible },
 }: EventListItemProps) {
   return (
