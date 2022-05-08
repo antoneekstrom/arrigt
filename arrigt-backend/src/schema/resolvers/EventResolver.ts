@@ -17,24 +17,24 @@ import {
 import { EventService } from "../../services/event.service";
 import { RegistrationService } from "../../services/registration.service";
 import { AddEventInput, UpdateEventInput } from "../inputs";
-import { EventObjectType } from "../types/Event";
-import { RegistrationObjectType } from "../types/Registration";
+import { Event } from "../types/Event";
+import { Registration } from "../types/Registration";
 
 /**
  * Resolves the event object type.
  */
 @Service()
-@Resolver((of) => EventObjectType)
+@Resolver((of) => Event)
 export class EventResolver {
   constructor(
     private readonly registrationService: RegistrationService,
     private readonly eventService: EventService
   ) {}
 
-  @Subscription((type) => EventObjectType, {
+  @Subscription((type) => Event, {
     topics: "event",
   })
-  async eventAdded(@Root() payload: EventObjectType) {
+  async eventAdded(@Root() payload: Event) {
     return payload;
   }
 
@@ -44,7 +44,7 @@ export class EventResolver {
    * @param id the id of the event to update
    * @param input the input to update the event with
    */
-  @Mutation((event) => EventObjectType)
+  @Mutation((event) => Event)
   async updateEvent(
     @Arg("id") id: string,
     @Arg("input") input: UpdateEventInput
@@ -63,7 +63,7 @@ export class EventResolver {
    *
    * @returns the event that was added
    */
-  @Mutation((event) => EventObjectType, {
+  @Mutation((event) => Event, {
     description: "Adds an event to the database.",
   })
   async addEvent(
@@ -82,7 +82,7 @@ export class EventResolver {
    * @param id
    * @returns
    */
-  @Query((of) => EventObjectType)
+  @Query((of) => Event)
   async event(@Arg("id") id: string) {
     return await this.eventService.getEvent(id);
   }
@@ -94,7 +94,7 @@ export class EventResolver {
    *
    * @returns the events
    */
-  @Query((returns) => [EventObjectType], {
+  @Query((returns) => [Event], {
     description: "Returns all events which there are registrations for.",
   })
   async events() {
@@ -108,7 +108,7 @@ export class EventResolver {
    *
    * @returns the events
    */
-  @Query((returns) => [EventObjectType], {
+  @Query((returns) => [Event], {
     description: "Returns all events which there are registrations for.",
   })
   async eventsFromRegistrations() {
@@ -124,10 +124,10 @@ export class EventResolver {
    * @param event the given event
    * @returns the registrations
    */
-  @FieldResolver((returns) => [RegistrationObjectType], {
+  @FieldResolver((returns) => [Registration], {
     description: "Returns all registrations for the given event.",
   })
-  async registrations(@Root() event: EventObjectType) {
+  async registrations(@Root() event: Event) {
     return await this.registrationService.getRegistrationsByEventId(event.id);
   }
 }

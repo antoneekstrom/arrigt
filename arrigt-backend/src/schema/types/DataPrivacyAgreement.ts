@@ -1,11 +1,11 @@
 import { Field, ObjectType } from "type-graphql";
-import { PartyObjectType } from "./Party";
+import { Party } from "./Party";
 
 /**
  * A type of data which is collected.
  */
 @ObjectType()
-export class CollectedDataObjectType {
+export class CollectedData {
   @Field()
   description!: string;
 
@@ -17,7 +17,7 @@ export class CollectedDataObjectType {
  * Agreement to the data privacy policy.
  */
 @ObjectType()
-export class DataPrivacyAgreementObjectType {
+export class DataPrivacyAgreement {
   /**
    * Why the data is collected.
    */
@@ -27,8 +27,8 @@ export class DataPrivacyAgreementObjectType {
   /**
    * The data that may be saved.
    */
-  @Field((type) => [CollectedDataObjectType])
-  dataGathered!: CollectedDataObjectType[];
+  @Field((type) => [CollectedData])
+  dataGathered!: CollectedData[];
 
   /**
    * If statistics will be saved.
@@ -39,14 +39,14 @@ export class DataPrivacyAgreementObjectType {
   /**
    * Whom the data may be shared with.
    */
-  @Field((type) => [PartyObjectType], { nullable: true })
-  sharedWith?: PartyObjectType[];
+  @Field((type) => [Party], { nullable: true })
+  sharedWith?: Party[];
 
   /**
    * The responsible party.
    */
-  @Field((type) => PartyObjectType)
-  responsible!: PartyObjectType;
+  @Field((type) => Party)
+  responsible!: Party;
 
   /**
    * The date which the data will definitely be deleted.
@@ -56,10 +56,10 @@ export class DataPrivacyAgreementObjectType {
 }
 
 @ObjectType()
-export class GDPRObjectType {
+export class DataPrivacyConsent {
   @Field()
   accepted!: boolean;
 
-  @Field((type) => DataPrivacyAgreementObjectType)
-  agreement!: DataPrivacyAgreementObjectType;
+  @Field((type) => DataPrivacyAgreement)
+  agreement!: DataPrivacyAgreement;
 }

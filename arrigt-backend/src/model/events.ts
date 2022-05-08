@@ -1,7 +1,7 @@
-import { DataPrivacyAgreementObjectType } from "../schema/types/DataPrivacyAgreement";
-import { EventObjectType } from "../schema/types/Event";
-import { EventResponsibleObjectType } from "../schema/types/EventResponsible";
-import { RegistrationObjectType } from "../schema/types/Registration";
+import { DataPrivacyAgreement } from "../schema/types/DataPrivacyAgreement";
+import { Event } from "../schema/types/Event";
+import { EventResponsible } from "../schema/types/EventResponsible";
+import { Registration } from "../schema/types/Registration";
 
 /**
  * Returns all events which there are registrations for.
@@ -10,13 +10,13 @@ import { RegistrationObjectType } from "../schema/types/Registration";
  * @returns the events
  */
 export function mapRegistrationsToEvents(
-  registrations: RegistrationObjectType[]
-): Partial<EventObjectType>[] {
+  registrations: Registration[]
+): Partial<Event>[] {
   // Add eventIds from the registrations to a set, to remove duplicates
   const eventIds = new Set(registrations.map(({ eventId }) => eventId));
 
   // Map the ids to event object types
-  const events: Partial<EventObjectType>[] = [...eventIds].map((id) => ({
+  const events: Partial<Event>[] = [...eventIds].map((id) => ({
     id,
   }));
 
@@ -31,9 +31,9 @@ export function mapRegistrationsToEvents(
  * @returns the event with the default details
  */
 export function applyDefaultEventDetails(
-  event: Omit<EventObjectType, "id" | "agreement">,
-  responsible: EventResponsibleObjectType
-): Omit<EventObjectType, "id"> {
+  event: Omit<Event, "id" | "agreement">,
+  responsible: EventResponsible
+): Omit<Event, "id"> {
   return {
     ...event,
     agreement: getDefaultEventAgreement(responsible),
@@ -47,8 +47,8 @@ export function applyDefaultEventDetails(
  * @returns the privacy agreement
  */
 function getDefaultEventAgreement(
-  responsible: EventResponsibleObjectType
-): DataPrivacyAgreementObjectType {
+  responsible: EventResponsible
+): DataPrivacyAgreement {
   return {
     dataGathered: [
       {

@@ -1,13 +1,13 @@
 import { Field, InputType } from "type-graphql";
-import { UserIdentityObjectType } from "../types/UserIdentity";
+import { User } from "../types/User";
 import {
-  CollectedDataObjectType,
-  DataPrivacyAgreementObjectType,
-  GDPRObjectType,
+  CollectedData,
+  DataPrivacyAgreement,
+  DataPrivacyConsent,
 } from "../types/DataPrivacyAgreement";
-import { PartyObjectType } from "../types/Party";
+import { Party } from "../types/Party";
 import { Equals, ValidateNested } from "class-validator";
-import { EventObjectType } from "../types/Event";
+import { Event } from "../types/Event";
 
 @InputType()
 export class EventResponsibleInput {
@@ -28,7 +28,7 @@ export class EventResponsibleInput {
 }
 
 @InputType()
-export class AddEventInput implements Partial<EventObjectType> {
+export class AddEventInput implements Partial<Event> {
   @Field()
   title!: string;
 
@@ -49,7 +49,7 @@ export class AddEventInput implements Partial<EventObjectType> {
 }
 
 @InputType()
-export class UpdateEventInput implements Partial<EventObjectType> {
+export class UpdateEventInput implements Partial<Event> {
   @Field({ nullable: true })
   title!: string;
 
@@ -70,7 +70,7 @@ export class UpdateEventInput implements Partial<EventObjectType> {
 }
 
 @InputType()
-export class PartyInput implements PartyObjectType {
+export class PartyInput implements Party {
   @Field()
   name!: string;
 
@@ -79,7 +79,7 @@ export class PartyInput implements PartyObjectType {
 }
 
 @InputType()
-export class CollectedDataInput implements CollectedDataObjectType {
+export class CollectedDataInput implements CollectedData {
   @Field()
   description!: string;
 
@@ -88,9 +88,7 @@ export class CollectedDataInput implements CollectedDataObjectType {
 }
 
 @InputType()
-export class DataPrivacyAgreementInput
-  implements DataPrivacyAgreementObjectType
-{
+export class DataPrivacyAgreementInput implements DataPrivacyAgreement {
   @Field()
   purpose!: string;
 
@@ -108,7 +106,7 @@ export class DataPrivacyAgreementInput
 }
 
 @InputType()
-export class GdprInput implements Partial<GDPRObjectType> {
+export class GdprInput implements Partial<DataPrivacyConsent> {
   @Field()
   @Equals(true, { message: "You must accept the data privacy agreement." })
   accepted!: boolean;
@@ -118,7 +116,7 @@ export class GdprInput implements Partial<GDPRObjectType> {
  * Input type for the addRegistration mutation.
  */
 @InputType()
-export class UserIdentityInput implements UserIdentityObjectType {
+export class UserInput implements User {
   @Field()
   email!: string;
 
@@ -149,8 +147,8 @@ export class AddRegistrationInput {
   @Field()
   eventId!: string;
 
-  @Field((type) => UserIdentityInput)
-  userIdentity!: UserIdentityInput;
+  @Field((type) => UserInput)
+  user!: UserInput;
 
   @Field((type) => UserDataInput)
   @ValidateNested()

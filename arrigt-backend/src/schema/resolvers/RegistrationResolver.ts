@@ -1,7 +1,7 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { Service } from "typedi";
 import { RegistrationService } from "../../services/registration.service";
-import { RegistrationObjectType } from "../types/Registration";
+import { Registration } from "../types/Registration";
 import { AddRegistrationInput } from "../inputs";
 import { EventService } from "../../services/event.service";
 
@@ -10,7 +10,7 @@ import { EventService } from "../../services/event.service";
  * Resolves the registration object type.
  */
 @Service()
-@Resolver((of) => RegistrationObjectType)
+@Resolver((of) => Registration)
 export class RegistrationResolver {
   constructor(
     private readonly registrationService: RegistrationService,
@@ -23,7 +23,7 @@ export class RegistrationResolver {
    * @param eventId id of the event
    * @returns the registrations
    */
-  @Query((returns) => [RegistrationObjectType], {
+  @Query((returns) => [Registration], {
     description: "Returns all registrations for the given event.",
   })
   async registrations(@Arg("eventId") eventId: string) {
@@ -36,7 +36,7 @@ export class RegistrationResolver {
    * @param input the input data
    * @returns the input data
    */
-  @Mutation((returns) => RegistrationObjectType, {
+  @Mutation((returns) => Registration, {
     description: "Adds a registration to the database.",
   })
   async addRegistration(
@@ -51,12 +51,11 @@ export class RegistrationResolver {
 
     await this.registrationService.addRegistration({
       ...input,
-      userData: {
-        gdpr: {
-          agreement: event.agreement,
-          accepted: input.userData.gdpr.accepted,
-        },
+      gdpr: {
+        agreement: event.agreement,
+        accepted: input.userData.gdpr.accepted,
       },
+      userData: {},
     });
     return input;
   }

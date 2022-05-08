@@ -1,12 +1,13 @@
 import { Field, ObjectType } from "type-graphql";
-import { UserDataObjectType } from "./UserData";
-import { UserIdentityObjectType } from "./UserIdentity";
+import { DataPrivacyConsent } from "./DataPrivacyAgreement";
+import { UserData } from "./UserData";
+import { User } from "./User";
 
 /**
  * A registration to an event.
  */
 @ObjectType()
-export class RegistrationObjectType {
+export class Registration {
   /**
    * Unique identifier of the registration.
    */
@@ -14,14 +15,20 @@ export class RegistrationObjectType {
   eventId!: string;
 
   /**
+   * Consent to the data privacy agreement.
+   */
+  @Field((type) => DataPrivacyConsent)
+  gdpr!: DataPrivacyConsent;
+
+  /**
    * The data of the user who has registered to the event.
    */
-  @Field((type) => UserDataObjectType, { nullable: true })
-  userData?: UserDataObjectType;
+  @Field((type) => UserData, { nullable: true })
+  userData?: UserData;
 
   /**
    * The identity of the user who has registered to the event.
    */
-  @Field((type) => UserIdentityObjectType, { nullable: true })
-  userIdentity?: UserIdentityObjectType;
+  @Field((type) => User, { nullable: true })
+  user?: User;
 }

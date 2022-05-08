@@ -6,7 +6,7 @@ export type MealPreferenceType = "allergic" | "prefers" | "dislikes";
  * Meal preferences of a user for an event.
  */
 @ObjectType()
-export class MealPreferenceObjectType {
+export class MealPreference {
   /**
    * What the preference is for.
    */

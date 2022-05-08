@@ -2,20 +2,21 @@ import { SubmitFormButton } from "./Button";
 import { FormInputField } from "./InputField";
 import { FormProvider, useForm } from "react-hook-form";
 import { gql, TypedDocumentNode, useMutation } from "urql";
-import { Event, UserIdentity } from "arrigt-backend/src/model/types";
 import { AddRegistrationInput } from "arrigt-backend/src/schema/inputs";
 import { FormErrors } from "./FormErrors";
 import { PrivacyPolicy } from "./PrivacyPolicy";
 import { NoLabel, WithLabel } from "./Label";
 import { LoadingBox } from "./LoadingBox";
 import { Card } from "./Card";
+import { Event } from "arrigt-backend/src/schema/types/Event";
+import { User } from "arrigt-backend/src/schema/types/User";
 
 export type RegistrationFormProps = {
   event: Partial<Pick<Event, "agreement" | "id">>;
   fetching?: boolean;
 };
 
-export type RegistrationFormType = Pick<UserIdentity, "name" | "email"> & {
+export type RegistrationFormType = Pick<User, "name" | "email"> & {
   gdpr: boolean;
 };
 
@@ -29,15 +30,11 @@ export const ADD_REGISTRATION_MUTATION: TypedDocumentNode<
 > = gql`
   mutation (
     $eventId: String!
-    $userIdentity: UserIdentityInput!
+    $user: UserInput!
     $userData: UserDataInput!
   ) {
     addRegistration(
-      input: {
-        eventId: $eventId
-        userIdentity: $userIdentity
-        userData: $userData
-      }
+      input: { eventId: $eventId, user: $user, userData: $userData }
     ) {
       eventId
     }
@@ -94,7 +91,7 @@ export function RegistrationForm({
     ) {
       const result = await addRegistrationMutation({
         eventId,
-        userIdentity: {
+        user: {
           email,
           ...parseName(name),
         },
@@ -114,7 +111,7 @@ export function RegistrationForm({
   }
 
   function redirectToRegisteredPage() {
-    window.location.href = "/registered";
+    window.location.href = "/event/registered";
   }
 
   function useAddRegistrationMutation() {

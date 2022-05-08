@@ -1,13 +1,13 @@
 import { Field, ObjectType } from "type-graphql";
-import { DataPrivacyAgreementObjectType } from "./DataPrivacyAgreement";
-import { EventResponsibleObjectType } from "./EventResponsible";
-import { RegistrationObjectType } from "./Registration";
+import { DataPrivacyAgreement } from "./DataPrivacyAgreement";
+import { EventResponsible } from "./EventResponsible";
+import { Registration } from "./Registration";
 
 /**
  * An event.
  */
 @ObjectType()
-export class EventObjectType {
+export class Event {
   @Field()
   id!: string;
 
@@ -26,12 +26,12 @@ export class EventObjectType {
   @Field({ nullable: true })
   imageUrl?: string;
 
-  @Field((type) => EventResponsibleObjectType)
-  responsible!: EventResponsibleObjectType;
+  @Field((type) => EventResponsible)
+  responsible!: EventResponsible;
 
-  @Field((type) => DataPrivacyAgreementObjectType)
-  agreement!: DataPrivacyAgreementObjectType;
+  @Field((type) => DataPrivacyAgreement)
+  agreement!: DataPrivacyAgreement;
 
-  @Field((returns) => [RegistrationObjectType])
-  registrations?: RegistrationObjectType;
+  @Field((returns) => [Registration])
+  registrations?: Registration;
 }

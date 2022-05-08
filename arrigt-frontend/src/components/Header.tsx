@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Wordmark } from "./Wordmark";
 
 export function Header() {
@@ -9,8 +8,6 @@ export function Header() {
         <Wordmark />
       </div>
       <nav className="flex flex-row place-items-center gap-8">
-        <Link href="/registrations">Registrations</Link>
-        <Link href="/events">Events</Link>
       </nav>
     </div>
   );
