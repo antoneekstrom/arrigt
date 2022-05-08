@@ -1,8 +1,13 @@
 import { Event } from "arrigt-backend/src/schema/types/Event";
 import { useRouter } from "next/router";
 import { gql, TypedDocumentNode, useQuery } from "urql";
-import { EventDetails } from "../../src/components/EventDetails";
-import { RegistrationForm } from "../../src/components/RegistrationForm";
+import {
+  Shimmer,
+  ShimmerCard,
+  ShimmerList,
+} from "../../src/components/layout/Shimmer";
+import { EventDetails } from "../../src/components/pages/event/EventDetails";
+import { RegistrationForm } from "../../src/components/pages/event/RegistrationForm";
 import { SubTitle } from "../../src/components/typography/Subtitle";
 
 type GetEventQueryReturn = {
@@ -53,11 +58,29 @@ export default function EventPage() {
   return (
     <div className="flex flex-col gap-16">
       <div className="col-span-2">
-        <EventDetails event={event ?? {}} fetching={fetching} />
+        {event && <EventDetails event={event} />}
+        {fetching && (
+          <div className="grid h-[40rem] grid-cols-3 gap-16">
+            <div className="col-span-2 flex flex-col gap-4">
+              <ShimmerList count={4} className="h-16" />
+            </div>
+            <Shimmer />
+          </div>
+        )}
       </div>
       <div>
-        <SubTitle>Anmälan</SubTitle>
-        <RegistrationForm event={event ?? {}} fetching={fetching} />
+        {event && (
+          <div>
+            <SubTitle>Anmälan</SubTitle>
+            <RegistrationForm event={event} />
+          </div>
+        )}
+        {fetching && (
+          <div className="flex flex-col gap-8">
+            <Shimmer className="h-[50px] w-1/2" />
+            <Shimmer className="h-[300px] w-full" />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { Event } from "arrigt-backend/src/schema/types/Event";
 import { gql, TypedDocumentNode, useQuery, useSubscription } from "urql";
-import { EventItem } from "../src/components/EventListItem";
+import { EventItem } from "../src/components/EventItem";
+import { ShimmerList } from "../src/components/layout/Shimmer";
 
 type GetEventsQueryReturn = {
   events: Event[];
@@ -43,7 +44,7 @@ const EVENTS_ADDED_SUBSCRIPTION: TypedDocumentNode<EventAddedSubcriptionPayload>
 `;
 
 export default function Events() {
-  const [{ data: initialEvents }] = useQuery({
+  const [{ data: initialEvents, fetching }] = useQuery({
     query: GET_EVENTS_QUERY,
   });
 
@@ -65,6 +66,7 @@ export default function Events() {
 
   return (
     <div className="flex w-full flex-col gap-8">
+      {fetching && <ShimmerList className="h-72" count={3} />}
       {events?.map((event) => (
         <EventItem event={event} key={event.id} />
       ))}

@@ -1,19 +1,16 @@
-import { SubmitFormButton } from "./forms/SubmitFormButton";
-import { FormInputField } from "./forms/FormInputField";
 import { FormProvider, useForm } from "react-hook-form";
 import { gql, TypedDocumentNode, useMutation } from "urql";
 import { AddRegistrationInput } from "arrigt-backend/src/schema/inputs";
-import { FormErrors } from "./forms/FormErrors";
-import { PrivacyPolicy } from "./forms/PrivacyPolicy";
-import { NoLabel, WithLabel } from "./typography/Label";
-import { Shimmer } from "./layout/Shimmer";
-import { Card } from "./layout/Card";
 import { Event } from "arrigt-backend/src/schema/types/Event";
 import { User } from "arrigt-backend/src/schema/types/User";
+import { FormErrors } from "../../forms/FormErrors";
+import { FormInputField } from "../../forms/FormInputField";
+import { PrivacyPolicy } from "../../forms/PrivacyPolicy";
+import { SubmitFormButton } from "../../forms/SubmitFormButton";
+import { WithLabel, NoLabel } from "../../typography/Label";
 
 export type RegistrationFormProps = {
-  event: Partial<Pick<Event, "agreement" | "id">>;
-  fetching?: boolean;
+  event: Pick<Event, "agreement" | "id">;
 };
 
 export type RegistrationFormType = Pick<User, "name" | "email"> & {
@@ -39,13 +36,12 @@ export const ADD_REGISTRATION_MUTATION: TypedDocumentNode<
 
 export function RegistrationForm({
   event: { agreement, id: eventId },
-  fetching,
 }: RegistrationFormProps) {
   const formContext = useFormContext();
   const submitRegistration = useSubmitRegistration();
 
   const onSubmit = async ({ name, email, gdpr }: RegistrationFormType) =>
-    submitRegistration(eventId ?? "", name, email, gdpr);
+    submitRegistration(eventId, name, email, gdpr);
 
   return (
     <FormProvider {...formContext}>
@@ -57,13 +53,7 @@ export function RegistrationForm({
             <FormErrors className="hidden lg:block" />
           </div>
           <WithLabel label="GDPR*" className="lg:col-start-2 lg:row-start-1">
-            {fetching || !agreement ? (
-              <Card classNameAll="w-full h-full">
-                <Shimmer className="h-full min-h-[300px] w-full" />
-              </Card>
-            ) : (
-              <PrivacyPolicy agreement={agreement} />
-            )}
+            <PrivacyPolicy agreement={agreement} />
           </WithLabel>
           <NoLabel className="flex flex-col gap-8 lg:col-start-2">
             <SubmitFormButton
@@ -134,7 +124,6 @@ export function RegistrationForm({
       /[a-zA-Z]([_.-]?[a-zA-Z])*@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/;
     return (
       <FormInputField
-        disabled={fetching}
         label="Mejl"
         name="email"
         options={{
@@ -157,7 +146,6 @@ export function RegistrationForm({
 
     return (
       <FormInputField
-        disabled={fetching}
         label={`Förnamn "Nick" Efternamn`}
         name="name"
         options={{

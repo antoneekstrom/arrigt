@@ -1,8 +1,10 @@
 export function insertClassName(
   classNames: string | undefined,
-  condition?: boolean
+  condition?: boolean,
+  falseByDefault = false
 ) {
-  return classNames && (typeof condition !== "boolean" || condition)
+  return classNames &&
+    ((typeof condition !== "boolean" && !falseByDefault) || condition)
     ? classNames
     : "";
 }
