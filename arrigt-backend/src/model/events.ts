@@ -1,6 +1,7 @@
-import { Event, EventResponsible, Registration } from "./types";
+import { DataPrivacyAgreementObjectType } from "../schema/types/DataPrivacyAgreement";
 import { EventObjectType } from "../schema/types/Event";
-import { DataPrivacyAgreement } from "./privacypolicy";
+import { EventResponsibleObjectType } from "../schema/types/EventResponsible";
+import { RegistrationObjectType } from "../schema/types/Registration";
 
 /**
  * Returns all events which there are registrations for.
@@ -9,7 +10,7 @@ import { DataPrivacyAgreement } from "./privacypolicy";
  * @returns the events
  */
 export function mapRegistrationsToEvents(
-  registrations: Registration[]
+  registrations: RegistrationObjectType[]
 ): Partial<EventObjectType>[] {
   // Add eventIds from the registrations to a set, to remove duplicates
   const eventIds = new Set(registrations.map(({ eventId }) => eventId));
@@ -30,9 +31,9 @@ export function mapRegistrationsToEvents(
  * @returns the event with the default details
  */
 export function applyDefaultEventDetails(
-  event: Omit<Event, "id" | "agreement">,
-  responsible: EventResponsible
-): Omit<Event, "id"> {
+  event: Omit<EventObjectType, "id" | "agreement">,
+  responsible: EventResponsibleObjectType
+): Omit<EventObjectType, "id"> {
   return {
     ...event,
     agreement: getDefaultEventAgreement(responsible),
@@ -46,8 +47,8 @@ export function applyDefaultEventDetails(
  * @returns the privacy agreement
  */
 function getDefaultEventAgreement(
-  responsible: EventResponsible
-): DataPrivacyAgreement {
+  responsible: EventResponsibleObjectType
+): DataPrivacyAgreementObjectType {
   return {
     dataGathered: [
       {

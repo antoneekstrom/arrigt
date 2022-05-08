@@ -1,10 +1,12 @@
 import { Field, ObjectType } from "type-graphql";
-import { UserData } from "../../model/types";
 import { GDPRObjectType } from "./DataPrivacyAgreement";
 import { MealPreferenceObjectType } from "./MealPreference";
 
+/**
+ * The data of a user who has registered to a certain event.
+ */
 @ObjectType()
-export class UserDataObjectType implements UserData {
+export class UserDataObjectType {
   @Field((type) => [MealPreferenceObjectType], { nullable: true })
   mealPreferences?: MealPreferenceObjectType[];
 

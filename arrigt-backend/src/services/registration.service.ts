@@ -1,6 +1,6 @@
 import { InsertOneResult } from "mongodb";
 import { Service } from "typedi";
-import { Registration } from "../model/types";
+import { RegistrationObjectType } from "../schema/types/Registration";
 import { MongoDbService } from "./mongodb.service";
 
 /**
@@ -10,34 +10,36 @@ import { MongoDbService } from "./mongodb.service";
 export class RegistrationService {
   constructor(private db: MongoDbService) {}
 
-  async getAllRegistrations(): Promise<Registration[]> {
-    return this.db.useCollection<Registration, Registration[]>(
-      "registrations",
-      async (collection) => {
-        return await collection.find().toArray();
-      }
-    );
+  async getAllRegistrations(): Promise<RegistrationObjectType[]> {
+    return this.db.useCollection<
+      RegistrationObjectType,
+      RegistrationObjectType[]
+    >("registrations", async (collection) => {
+      return await collection.find().toArray();
+    });
   }
 
-  async getRegistrationsByEventId(eventId: string): Promise<Registration[]> {
-    return this.db.useCollection<Registration, Registration[]>(
-      "registrations",
-      async (collection) => {
-        return await collection
-          .find({
-            eventId: eventId,
-          })
-          .toArray();
-      }
-    );
+  async getRegistrationsByEventId(
+    eventId: string
+  ): Promise<RegistrationObjectType[]> {
+    return this.db.useCollection<
+      RegistrationObjectType,
+      RegistrationObjectType[]
+    >("registrations", async (collection) => {
+      return await collection
+        .find({
+          eventId: eventId,
+        })
+        .toArray();
+    });
   }
 
-  async addRegistration(registration: Registration) {
-    return this.db.useCollection<Registration, InsertOneResult<Registration>>(
-      "registrations",
-      async (collection) => {
-        return await collection.insertOne(registration);
-      }
-    );
+  async addRegistration(registration: RegistrationObjectType) {
+    return this.db.useCollection<
+      RegistrationObjectType,
+      InsertOneResult<RegistrationObjectType>
+    >("registrations", async (collection) => {
+      return await collection.insertOne(registration);
+    });
   }
 }

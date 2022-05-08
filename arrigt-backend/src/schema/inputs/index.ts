@@ -4,14 +4,13 @@ import {
   CollectedDataObjectType,
   DataPrivacyAgreementObjectType,
   GDPRObjectType,
-  PartyObjectType,
 } from "../types/DataPrivacyAgreement";
+import { PartyObjectType } from "../types/Party";
 import { Equals, ValidateNested } from "class-validator";
 import { EventObjectType } from "../types/Event";
-import { EventResponsibleObjectType } from "../types/EventResponsible";
 
 @InputType()
-export class EventResponsibleInput implements EventResponsibleObjectType {
+export class EventResponsibleInput {
   @Field()
   iconUrl!: string;
 

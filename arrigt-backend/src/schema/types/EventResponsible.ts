@@ -1,12 +1,8 @@
 import { Field, ObjectType } from "type-graphql";
-import { EventResponsible } from "../../model/types";
-import { PartyObjectType } from "./DataPrivacyAgreement";
+import { PartyObjectType } from "./Party";
 
 @ObjectType()
-export class EventResponsibleObjectType
-  extends PartyObjectType
-  implements EventResponsible
-{
+export class EventResponsibleObjectType extends PartyObjectType {
   @Field()
   iconUrl!: string;
 }

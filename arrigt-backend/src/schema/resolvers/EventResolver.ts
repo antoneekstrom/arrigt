@@ -1,6 +1,5 @@
 import {
   Arg,
-  Args,
   FieldResolver,
   Mutation,
   PubSub,
@@ -11,7 +10,6 @@ import {
   Subscription,
 } from "type-graphql";
 import { Service } from "typedi";
-import { Event } from "../../model/types";
 import {
   applyDefaultEventDetails,
   mapRegistrationsToEvents,
@@ -74,7 +72,7 @@ export class EventResolver {
   ) {
     const event = applyDefaultEventDetails(input, input.responsible);
     const result = await this.eventService.addEvent(event);
-    const eventWithId: Event = { ...event, id: result.insertedId.toString() };
+    const eventWithId = { ...event, id: result.insertedId.toString() };
     await pubSub.publish("event", eventWithId);
     return eventWithId;
   }

@@ -1,8 +1,10 @@
 import { Field, ObjectType } from "type-graphql";
-import { UserIdentity } from "../../model/types";
 
+/**
+ * The credentials of a user who has registered to an event.
+ */
 @ObjectType()
-export class UserIdentityObjectType implements UserIdentity {
+export class UserIdentityObjectType {
   @Field()
   email!: string;
 
@@ -12,6 +14,9 @@ export class UserIdentityObjectType implements UserIdentity {
   @Field({ nullable: true })
   nickname?: string;
 
+  /**
+   * Identifies the user across several registrations.
+   */
   @Field({ nullable: true })
   id?: string;
 }
