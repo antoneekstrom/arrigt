@@ -16,7 +16,7 @@ const resolvers: NonEmptyArray<Function> = [
  *
  * @returns the schema
  */
-export async function schema() {
+export async function createSchema() {
   return await buildSchema({
     resolvers,
     container: Container,

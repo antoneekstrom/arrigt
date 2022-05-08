@@ -1,5 +1,5 @@
-import { Event, EventResponsible, Registration } from ".";
-import { EventObjectType } from "../graphql/schema/types/Event";
+import { Event, EventResponsible, Registration } from "./types";
+import { EventObjectType } from "../schema/types/Event";
 import { DataPrivacyAgreement } from "./privacypolicy";
 
 /**

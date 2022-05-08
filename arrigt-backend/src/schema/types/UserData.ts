@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { UserData } from "../../../model";
+import { UserData } from "../../model/types";
 import { GDPRObjectType } from "./DataPrivacyAgreement";
 import { MealPreferenceObjectType } from "./MealPreference";
 

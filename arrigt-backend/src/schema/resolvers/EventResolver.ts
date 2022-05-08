@@ -1,18 +1,23 @@
 import {
   Arg,
+  Args,
   FieldResolver,
   Mutation,
+  PubSub,
+  PubSubEngine,
   Query,
   Resolver,
   Root,
+  Subscription,
 } from "type-graphql";
 import { Service } from "typedi";
+import { Event } from "../../model/types";
 import {
   applyDefaultEventDetails,
   mapRegistrationsToEvents,
-} from "../../../model/events";
-import { EventService } from "../../../services/event.service";
-import { RegistrationService } from "../../../services/registration.service";
+} from "../../model/events";
+import { EventService } from "../../services/event.service";
+import { RegistrationService } from "../../services/registration.service";
 import { AddEventInput, UpdateEventInput } from "../inputs";
 import { EventObjectType } from "../types/Event";
 import { RegistrationObjectType } from "../types/Registration";
@@ -27,6 +32,13 @@ export class EventResolver {
     private readonly registrationService: RegistrationService,
     private readonly eventService: EventService
   ) {}
+
+  @Subscription((type) => EventObjectType, {
+    topics: "event",
+  })
+  async eventAdded(@Root() payload: EventObjectType) {
+    return payload;
+  }
 
   /**
    * Updates an event.
@@ -56,10 +68,15 @@ export class EventResolver {
   @Mutation((event) => EventObjectType, {
     description: "Adds an event to the database.",
   })
-  async addEvent(@Arg("input") input: AddEventInput) {
+  async addEvent(
+    @Arg("input") input: AddEventInput,
+    @PubSub() pubSub: PubSubEngine
+  ) {
     const event = applyDefaultEventDetails(input, input.responsible);
     const result = await this.eventService.addEvent(event);
-    return { ...event, id: result.insertedId.toString() };
+    const eventWithId: Event = { ...event, id: result.insertedId.toString() };
+    await pubSub.publish("event", eventWithId);
+    return eventWithId;
   }
 
   /**

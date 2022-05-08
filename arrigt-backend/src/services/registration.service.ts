@@ -1,6 +1,6 @@
 import { InsertOneResult } from "mongodb";
 import { Service } from "typedi";
-import { Registration } from "../model";
+import { Registration } from "../model/types";
 import { MongoDbService } from "./mongodb.service";
 
 /**

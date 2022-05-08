@@ -16,6 +16,6 @@
     "resolveJsonModule": true,
     "experimentalDecorators": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../arrigt-backend/src/env.ts"],
   "exclude": ["node_modules"]
 }

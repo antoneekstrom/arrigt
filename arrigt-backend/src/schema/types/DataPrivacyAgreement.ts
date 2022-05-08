@@ -4,7 +4,7 @@ import {
   CollectedData,
   DataPrivacyAgreement,
   GDPR,
-} from "../../../model/privacypolicy";
+} from "../../model/privacypolicy";
 
 @ObjectType()
 export class PartyObjectType implements Party {

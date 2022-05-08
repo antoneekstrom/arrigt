@@ -1,10 +1,13 @@
-import { Event } from "arrigt-backend/src/model";
-import { gql, TypedDocumentNode, useQuery } from "urql";
+import { Event } from "arrigt-backend/src/model/types";
+import { gql, TypedDocumentNode, useQuery, useSubscription } from "urql";
 import { EventListItem } from "../src/components/EventListItem";
-import { LoadingBox } from "../src/components/LoadingBox";
 
 type GetEventsQueryReturn = {
-  events: (Partial<Event> & Required<Pick<Event, "id">>)[];
+  events: Event[];
+};
+
+type EventAddedSubcriptionPayload = {
+  eventAdded: Event;
 };
 
 const GET_EVENTS_QUERY: TypedDocumentNode<GetEventsQueryReturn> = gql`
@@ -23,28 +26,48 @@ const GET_EVENTS_QUERY: TypedDocumentNode<GetEventsQueryReturn> = gql`
   }
 `;
 
+const EVENTS_ADDED_SUBSCRIPTION: TypedDocumentNode<EventAddedSubcriptionPayload> = gql`
+  subscription {
+    eventAdded {
+      id
+      title
+      imageUrl
+      description
+      date
+      responsible {
+        name
+        iconUrl
+      }
+    }
+  }
+`;
+
 export default function Events() {
-  const [{ data, fetching }] = useQuery({
+  const [{ data: initialEvents }] = useQuery({
     query: GET_EVENTS_QUERY,
   });
 
+  function reduceEvents(
+    events: Event[] = [],
+    { eventAdded }: EventAddedSubcriptionPayload
+  ): Event[] {
+    return [...events, eventAdded];
+  }
+
+  const [{ data: eventsAdded }] = useSubscription(
+    {
+      query: EVENTS_ADDED_SUBSCRIPTION,
+    },
+    reduceEvents
+  );
+
+  const events = [...(initialEvents?.events ?? []), ...(eventsAdded ?? [])];
+
   return (
-    <div>
-      <ul className="flex w-full flex-col gap-8">
-        {fetching ? (
-          <>
-            <LoadingBox className="h-[250px] w-full" />
-            <LoadingBox className="h-[250px] w-full" />
-            <LoadingBox className="h-[250px] w-full" />
-          </>
-        ) : (
-          data?.events.map((event) => (
-            <li key={event.id}>
-              <EventListItem event={event} />
-            </li>
-          ))
-        )}
-      </ul>
+    <div className="flex w-full flex-col gap-8">
+      {events?.map((event) => (
+        <EventListItem event={event} key={event.id} />
+      ))}
     </div>
   );
 }

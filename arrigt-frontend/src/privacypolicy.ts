@@ -1,5 +1,5 @@
 import { DataPrivacyAgreement } from "arrigt-backend/src/model/privacypolicy";
-import { Event } from "arrigt-backend/src/model";
+import { Event } from "arrigt-backend/src/model/types";
 
 /**
  *

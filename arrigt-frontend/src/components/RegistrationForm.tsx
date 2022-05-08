@@ -1,13 +1,12 @@
 import { SubmitFormButton } from "./Button";
 import { FormInputField } from "./InputField";
 import { FormProvider, useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { useMutation } from "urql";
-import { Event, UserIdentity } from "arrigt-backend/src/model";
+import { gql, TypedDocumentNode, useMutation } from "urql";
+import { Event, UserIdentity } from "arrigt-backend/src/model/types";
+import { AddRegistrationInput } from "arrigt-backend/src/schema/inputs";
 import { FormErrors } from "./FormErrors";
 import { PrivacyPolicy } from "./PrivacyPolicy";
 import { NoLabel, WithLabel } from "./Label";
-import { ADD_REGISTRATION } from "../graphql/queries";
 import { LoadingBox } from "./LoadingBox";
 import { Card } from "./Card";
 
@@ -19,6 +18,31 @@ export type RegistrationFormProps = {
 export type RegistrationFormType = Pick<UserIdentity, "name" | "email"> & {
   gdpr: boolean;
 };
+
+type AddRegistrationMutationReturn = {
+  addRegistration: Event;
+};
+
+export const ADD_REGISTRATION_MUTATION: TypedDocumentNode<
+  AddRegistrationMutationReturn,
+  AddRegistrationInput
+> = gql`
+  mutation (
+    $eventId: String!
+    $userIdentity: UserIdentityInput!
+    $userData: UserDataInput!
+  ) {
+    addRegistration(
+      input: {
+        eventId: $eventId
+        userIdentity: $userIdentity
+        userData: $userData
+      }
+    ) {
+      eventId
+    }
+  }
+`;
 
 export function RegistrationForm({
   event: { agreement, id: eventId },
@@ -83,6 +107,8 @@ export function RegistrationForm({
 
       if (!result.error) {
         redirectToRegisteredPage();
+      } else {
+        console.error(result.error);
       }
     };
   }
@@ -92,7 +118,7 @@ export function RegistrationForm({
   }
 
   function useAddRegistrationMutation() {
-    const [, executeMutation] = useMutation(ADD_REGISTRATION);
+    const [, executeMutation] = useMutation(ADD_REGISTRATION_MUTATION);
     return executeMutation;
   }
 

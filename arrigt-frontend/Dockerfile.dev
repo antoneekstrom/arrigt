@@ -4,8 +4,6 @@ COPY .. .
 
 RUN yarn install
 
-
-
 FROM node:17-alpine AS run
 
 COPY --from=build .. .

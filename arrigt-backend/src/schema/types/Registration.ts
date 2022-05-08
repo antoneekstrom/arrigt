@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { Registration, UserIdentity } from "../../../model";
+import { Registration, UserIdentity } from "../../model/types";
 import { UserDataObjectType } from "./UserData";
 import { UserIdentityObjectType } from "./UserIdentity";
 

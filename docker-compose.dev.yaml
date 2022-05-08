@@ -5,25 +5,28 @@ services:
     image: mongo
     restart: unless-stopped
     environment:
-      MONGO_INITDB_ROOT_USERNAME: plupp
-      MONGO_INITDB_ROOT_PASSWORD: plupp
-      MONGO_INITDB_DATABASE: plupp
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
   mongo-express:
     image: mongo-express
     restart: unless-stopped
     ports:
-      - 8081:8081
+      - ${PORT_MONGOEXPRESS}:${PORT_MONGOEXPRESS_INTERNAL}
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: plupp
-      ME_CONFIG_MONGODB_ADMINPASSWORD: plupp
-      ME_CONFIG_MONGODB_URL: mongodb://plupp:plupp@db:27017/
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASS}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USER}:${MONGO_PASS}@db:${PORT_DB}/
   frontend:
     restart: unless-stopped
     build:
       context: ./
       dockerfile: ./arrigt-frontend/Dockerfile.dev
+    environment:
+      - URL_BACKEND:${URL_BACKEND}
+      - GRAPHQL_ENDPOINT:${GRAPHQL_ENDPOINT}
     ports:
-      - 3000:3000
+      - ${PORT_FRONTEND}:${PORT_INTERNAL_DEFAULT}
     volumes:
       - ./arrigt-frontend:/arrigt-frontend
       - /arrigt-frontend/node_modules
@@ -32,8 +35,13 @@ services:
     build:
       context: ./arrigt-backend
       dockerfile: Dockerfile.dev
+    environment:
+      - URL_FRONTEND=${URL_FRONTEND}
+      - PORT=${PORT_INTERNAL_DEFAULT}
+      - GRAPHQL_PATH=${GRAPHQL_PATH}
+      - CORS_URLS=${CORS_URLS}
     ports:
-      - 3001:3000
+      - ${PORT_BACKEND}:${PORT_INTERNAL_DEFAULT}
     volumes:
       - ./arrigt-backend:/app
       - /app/node_modules

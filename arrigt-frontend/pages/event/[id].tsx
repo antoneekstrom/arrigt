@@ -1,8 +1,7 @@
-import { Event } from "arrigt-backend/src/model";
+import { Event } from "arrigt-backend/src/model/types";
 import { useRouter } from "next/router";
 import { gql, TypedDocumentNode, useQuery } from "urql";
 import { EventDetails } from "../../src/components/EventDetails";
-import { LoadingBox } from "../../src/components/LoadingBox";
 import { RegistrationForm } from "../../src/components/RegistrationForm";
 import { SubTitle } from "../../src/components/Subtitle";
 

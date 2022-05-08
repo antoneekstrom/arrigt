@@ -1,9 +1,9 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { Service } from "typedi";
-import { RegistrationService } from "../../../services/registration.service";
+import { RegistrationService } from "../../services/registration.service";
 import { RegistrationObjectType } from "../types/Registration";
 import { AddRegistrationInput } from "../inputs";
-import { EventService } from "../../../services/event.service";
+import { EventService } from "../../services/event.service";
 
 /**
  *

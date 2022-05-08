@@ -1,6 +1,6 @@
 import { DataPrivacyAgreement } from "arrigt-backend/src/model/privacypolicy";
 import { useFormContext } from "react-hook-form";
-import { agreementTemplate } from "../privacypolicy/template";
+import { agreementTemplate } from "../privacypolicy";
 import { Card } from "./Card";
 import { Checkbox } from "./Checkbox";
 import { useInputStateIntent } from "./InputField";

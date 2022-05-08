@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { EventResponsible } from "../../../model";
+import { EventResponsible } from "../../model/types";
 import { PartyObjectType } from "./DataPrivacyAgreement";
 
 @ObjectType()

@@ -1,7 +1,6 @@
 /**
  *
  */
-
 export type GDPR = {
   accepted: boolean;
   agreement: DataPrivacyAgreement;
@@ -10,7 +9,6 @@ export type GDPR = {
 /**
  * Agreement to the data privacy policy.
  */
-
 export type DataPrivacyAgreement = {
   /**
    * Why the data is collected.
@@ -37,18 +35,18 @@ export type DataPrivacyAgreement = {
    */
   lastDeletion: Date;
 };
+
 /**
  * A type of data which is collected.
  */
-
 export type CollectedData = {
   description: string;
   usage: string;
 };
+
 /**
  * A party to whom the data may be shared.
  */
-
 export type Party = {
   name: string;
   email: string;

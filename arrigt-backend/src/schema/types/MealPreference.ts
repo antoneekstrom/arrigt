@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from "type-graphql";
-import { MealPreference, PreferenceType } from "../../../model";
+import { MealPreference, PreferenceType } from "../../model/types";
 
 @ObjectType()
 export class MealPreferenceObjectType implements MealPreference {

@@ -1,22 +1,15 @@
+// Required by type-graphql
 import "reflect-metadata";
-import express from "express";
-import { schema } from "./graphql/schema";
-import { addGraphqlRoute } from "./app/routes/graphql";
-import { configureCors, getCorsMiddleware } from "./app/configure/cors";
-import { start } from "./app";
-import http from "http";
-
-run();
+import { configureApp } from "./app/configure";
+import { createApp, startApp } from "./app/start";
 
 /**
- * Entrypoint of the server.
+ * Entrypoint for the backend application.
  */
 async function run() {
-  const app = express();
-  const httpServer = new http.Server(app);
-
-  await addGraphqlRoute(app, httpServer, await schema(), "/graphql");
-
-  await new Promise<void>(resolve => httpServer.listen({ port: 3000 }, resolve));
-  console.log("Server started");
+  const result = await createApp();
+  await configureApp(result);
+  await startApp(result);
 }
+
+run();

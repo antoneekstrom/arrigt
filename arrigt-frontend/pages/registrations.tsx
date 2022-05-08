@@ -1,6 +1,6 @@
 import { gql, TypedDocumentNode, useQuery, UseQueryState } from "urql";
-import { Registration } from "arrigt-backend/src/model";
-import { EventObjectType } from "arrigt-backend/src/graphql/schema/types/Event";
+import { Registration } from "arrigt-backend/src/model/types";
+import { EventObjectType } from "arrigt-backend/src/schema/types/Event";
 import { FormInputField } from "../src/components/InputField";
 import { FormProvider, useForm } from "react-hook-form";
 

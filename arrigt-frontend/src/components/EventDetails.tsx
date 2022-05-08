@@ -1,4 +1,4 @@
-import { Event } from "arrigt-backend/src/model";
+import { Event } from "arrigt-backend/src/model/types";
 import { LoadingBox } from "./LoadingBox";
 import { Paragraphs } from "./Paragraphs";
 import { Title } from "./Title";

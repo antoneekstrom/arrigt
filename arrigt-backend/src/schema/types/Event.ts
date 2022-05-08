@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { Event } from "../../../model";
+import { Event } from "../../model/types";
 import { DataPrivacyAgreementObjectType } from "./DataPrivacyAgreement";
 import { EventResponsibleObjectType } from "./EventResponsible";
 import { RegistrationObjectType } from "./Registration";

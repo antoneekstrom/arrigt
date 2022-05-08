@@ -1,6 +1,6 @@
 import { InsertOneResult, ObjectId, UpdateResult, WithId } from "mongodb";
 import { Service } from "typedi";
-import { Event } from "../model";
+import { Event } from "../model/types";
 import { MongoDbService } from "./mongodb.service";
 
 @Service()
