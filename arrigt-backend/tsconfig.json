@@ -1,20 +1,23 @@
 {
   "compilerOptions": {
     "outDir": "build",
+    // es2018 or later and asynciterable is required by type-graphql
     "lib": ["es2018", "esnext.asynciterable"],
-    "target": "esnext", // type-graphql requires es2018 or later and asynciterable
+    "target": "esnext",
     "module": "commonjs",
-    "esModuleInterop": true,
+
     "strict": true,
+    "esModuleInterop": true,
+    // emitDecoratorMetadata and experimentalDecorators are required by type-graphql
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
+  // Configures polling for watching files, in order for hot-reload to work properly in container
   "watchOptions": {
+    "synchronousWatchDirectory": true,
     "watchFile": "useFsEvents",
     "watchDirectory": "useFsEvents",
     "fallbackPolling": "dynamicPriority",
-    "synchronousWatchDirectory": true,
     "excludeDirectories": ["**/node_modules", "build"]
-  },
-  "include": ["./src"]
+  }
 }
