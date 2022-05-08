@@ -1,4 +1,4 @@
-import { insertClassName } from "../../classnames";
+import { insertClassName } from "../../util/classnames";
 import { Card } from "../layout/Card";
 
 export type ButtonProps = React.HTMLAttributes<HTMLButtonElement> & {

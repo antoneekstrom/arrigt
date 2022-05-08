@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
-import { insertClassName } from "../../classnames";
-import { PropsWithChildrenAndClassName } from "../../props";
+import { insertClassName } from "../../util/classnames";
+import { PropsWithChildrenAndClassName } from "../../util/props";
 
 export type CardProps = PropsWithChildrenAndClassName<{
   classNameAll?: string;
