@@ -1,15 +1,12 @@
-import { EventObjectType } from "arrigt-backend/src/schema/types/Event";
+import { Event } from "arrigt-backend/src/schema/types/Event";
 import { useRouter } from "next/router";
 import { gql, TypedDocumentNode, useQuery } from "urql";
 import { EventDetails } from "../../src/components/EventDetails";
 import { RegistrationForm } from "../../src/components/RegistrationForm";
-import { SubTitle } from "../../src/components/Subtitle";
+import { SubTitle } from "../../src/components/typography/Subtitle";
 
 type GetEventQueryReturn = {
-  event: Pick<
-    EventObjectType,
-    "title" | "description" | "imageUrl" | "id" | "agreement"
-  >;
+  event: Pick<Event, "title" | "description" | "imageUrl" | "id" | "agreement">;
 };
 
 const GET_EVENT_QUERY: TypedDocumentNode<GetEventQueryReturn> = gql`

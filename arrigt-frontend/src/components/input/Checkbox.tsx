@@ -1,6 +1,6 @@
-import React, { forwardRef, HTMLProps, PropsWithChildren } from "react";
+import React, { forwardRef, HTMLAttributes, PropsWithChildren } from "react";
 
-export type CheckboxProps = PropsWithChildren<HTMLProps<HTMLInputElement>>;
+export type CheckboxProps = PropsWithChildren<HTMLAttributes<HTMLInputElement>>;
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   function Checkbox({ children, className, ...props }, ref) {

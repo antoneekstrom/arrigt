@@ -1,13 +1,13 @@
-import { EventObjectType } from "arrigt-backend/src/schema/types/Event";
+import { Event } from "arrigt-backend/src/schema/types/Event";
 import { gql, TypedDocumentNode, useQuery, useSubscription } from "urql";
 import { EventListItem } from "../src/components/EventListItem";
 
 type GetEventsQueryReturn = {
-  events: EventObjectType[];
+  events: Event[];
 };
 
 type EventAddedSubcriptionPayload = {
-  eventAdded: EventObjectType;
+  eventAdded: Event;
 };
 
 const GET_EVENTS_QUERY: TypedDocumentNode<GetEventsQueryReturn> = gql`
@@ -48,9 +48,9 @@ export default function Events() {
   });
 
   function reduceEvents(
-    events: EventObjectType[] = [],
+    events: Event[] = [],
     { eventAdded }: EventAddedSubcriptionPayload
-  ): EventObjectType[] {
+  ): Event[] {
     return [...events, eventAdded];
   }
 

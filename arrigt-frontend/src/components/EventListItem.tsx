@@ -1,4 +1,4 @@
-import { Event } from "arrigt-backend/src/model/types";
+import { Event } from "arrigt-backend/src/schema/types/Event";
 
 export type EventListItemProps = {
   event: Partial<Event>;

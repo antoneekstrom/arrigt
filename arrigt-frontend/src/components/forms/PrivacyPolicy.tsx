@@ -1,9 +1,9 @@
-import { DataPrivacyAgreement } from "arrigt-backend/src/model/privacypolicy";
+import { DataPrivacyAgreement } from "arrigt-backend/src/schema/types/DataPrivacyAgreement";
 import { useFormContext } from "react-hook-form";
-import { agreementTemplate } from "../privacypolicy";
-import { Card } from "./Card";
-import { Checkbox } from "./Checkbox";
-import { useInputStateIntent } from "./InputField";
+import { agreementTemplate } from "../../privacypolicy";
+import { useInputStateIntent } from "./FormInputField";
+import { Card } from "../layout/Card";
+import { Checkbox } from "../input/Checkbox";
 
 export type PrivacyPolicyProps = {
   agreement: DataPrivacyAgreement;
@@ -14,7 +14,7 @@ export function PrivacyPolicy({ agreement }: PrivacyPolicyProps) {
   const intent = useInputStateIntent("gdpr");
 
   return (
-    <Card classNameInFront="p-6" className={`${intent}`}>
+    <Card classNameInFront="p-6" className={intent}>
       <h1 className="text-md font-medium">Data privacy agreement</h1>
       <div className="mt-2 flex flex-col gap-2">
         {agreementTemplate(agreement)

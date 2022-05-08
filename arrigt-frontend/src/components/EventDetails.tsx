@@ -1,7 +1,7 @@
-import { Event } from "arrigt-backend/src/model/types";
-import { LoadingBox } from "./LoadingBox";
-import { Paragraphs } from "./Paragraphs";
-import { Title } from "./Title";
+import { Event } from "arrigt-backend/src/schema/types/Event";
+import { Shimmer } from "./layout/Shimmer";
+import { Paragraphs } from "./typography/Paragraphs";
+import { Title } from "./typography/Title";
 
 export type EventDetailsProps = { event: Partial<Event>; fetching?: boolean };
 
@@ -19,8 +19,8 @@ export function EventDetails({ event, fetching }: EventDetailsProps) {
   function TextContent() {
     return fetching ? (
       <div className="flex flex-col gap-8">
-        <LoadingBox className="h-[60px] w-full lg:w-[35vw]" />
-        <LoadingBox className="h-[400px] w-full lg:w-[50vw]" />
+        <Shimmer className="h-[60px] w-full lg:w-[35vw]" />
+        <Shimmer className="h-[400px] w-full lg:w-[50vw]" />
       </div>
     ) : (
       <div className="grow-[3] basis-0">
@@ -32,7 +32,7 @@ export function EventDetails({ event, fetching }: EventDetailsProps) {
 
   function Poster() {
     return fetching ? (
-      <LoadingBox className="h-[492px] w-full grow" />
+      <Shimmer className="h-[492px] w-full grow" />
     ) : (
       <div className="grid grow-[2] basis-0 place-items-center">
         <img

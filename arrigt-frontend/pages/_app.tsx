@@ -2,7 +2,7 @@
 import "../tailwind.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import Page from "../src/components/Page";
+import Page from "../src/components/layout/Page";
 import { ClientProvider } from "../src/graphql/ClientProvider";
 import { URL_BACKEND } from "../src/env";
 

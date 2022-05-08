@@ -1,13 +1,13 @@
-import { SubmitFormButton } from "./Button";
-import { FormInputField } from "./InputField";
+import { SubmitFormButton } from "./forms/SubmitFormButton";
+import { FormInputField } from "./forms/FormInputField";
 import { FormProvider, useForm } from "react-hook-form";
 import { gql, TypedDocumentNode, useMutation } from "urql";
 import { AddRegistrationInput } from "arrigt-backend/src/schema/inputs";
-import { FormErrors } from "./FormErrors";
-import { PrivacyPolicy } from "./PrivacyPolicy";
-import { NoLabel, WithLabel } from "./Label";
-import { LoadingBox } from "./LoadingBox";
-import { Card } from "./Card";
+import { FormErrors } from "./forms/FormErrors";
+import { PrivacyPolicy } from "./forms/PrivacyPolicy";
+import { NoLabel, WithLabel } from "./typography/Label";
+import { Shimmer } from "./layout/Shimmer";
+import { Card } from "./layout/Card";
 import { Event } from "arrigt-backend/src/schema/types/Event";
 import { User } from "arrigt-backend/src/schema/types/User";
 
@@ -28,11 +28,7 @@ export const ADD_REGISTRATION_MUTATION: TypedDocumentNode<
   AddRegistrationMutationReturn,
   AddRegistrationInput
 > = gql`
-  mutation (
-    $eventId: String!
-    $user: UserInput!
-    $userData: UserDataInput!
-  ) {
+  mutation ($eventId: String!, $user: UserInput!, $userData: UserDataInput!) {
     addRegistration(
       input: { eventId: $eventId, user: $user, userData: $userData }
     ) {
@@ -63,7 +59,7 @@ export function RegistrationForm({
           <WithLabel label="GDPR*" className="lg:col-start-2 lg:row-start-1">
             {fetching || !agreement ? (
               <Card classNameAll="w-full h-full">
-                <LoadingBox className="h-full min-h-[300px] w-full" />
+                <Shimmer className="h-full min-h-[300px] w-full" />
               </Card>
             ) : (
               <PrivacyPolicy agreement={agreement} />
