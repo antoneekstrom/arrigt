@@ -1,10 +1,8 @@
 import { Event } from "arrigt-backend/src/schema/types/Event";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { gql, TypedDocumentNode, useQuery } from "urql";
-import {
-  Shimmer,
-  ShimmerList,
-} from "../../src/components/layout/Shimmer";
+import { Shimmer, ShimmerList } from "../../src/components/layout/Shimmer";
 import { EventDetails } from "../../src/components/pages/event/EventDetails";
 import { RegistrationForm } from "../../src/components/pages/event/RegistrationForm";
 import { SubTitle } from "../../src/components/typography/Subtitle";
@@ -56,6 +54,9 @@ export default function EventPage() {
 
   return (
     <div className="flex flex-col gap-16">
+      <Head>
+        <title>{event?.title && `${event.title} -`} arrIgT</title>
+      </Head>
       <div className="col-span-2">
         {event && <EventDetails event={event} />}
         {fetching && (
