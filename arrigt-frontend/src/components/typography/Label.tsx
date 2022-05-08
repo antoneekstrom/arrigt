@@ -1,4 +1,4 @@
-import { PropsWithChildrenAndClassName } from "../../props";
+import { PropsWithChildrenAndClassName } from "../../util/props";
 
 export type WithLabelProps = PropsWithChildrenAndClassName<{
   label: string;

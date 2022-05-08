@@ -1,5 +1,5 @@
-import { insertClassName } from "../../classnames";
-import { PropsWithClassName } from "../../props";
+import { insertClassName } from "../../util/classnames";
+import { PropsWithClassName } from "../../util/props";
 import { Card, CardProps } from "./Card";
 
 export type ShimmerListProps = PropsWithClassName & {

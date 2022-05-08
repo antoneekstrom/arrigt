@@ -1,7 +1,7 @@
 import { forwardRef, HTMLAttributes } from "react";
 import { Card } from "../layout/Card";
 import { WithLabel } from "../typography/Label";
-import { insertClassName } from "../../classnames";
+import { insertClassName } from "../../util/classnames";
 
 export type InputFieldProps = HTMLAttributes<HTMLInputElement> & {
   label: string;

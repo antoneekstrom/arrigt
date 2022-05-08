@@ -1,5 +1,5 @@
-import { insertClassName } from "../../classnames";
-import { PropsWithChildrenAndClassName } from "../../props";
+import { insertClassName } from "../../util/classnames";
+import { PropsWithChildrenAndClassName } from "../../util/props";
 
 export function SubTitle({
   className,

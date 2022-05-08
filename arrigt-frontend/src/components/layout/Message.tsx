@@ -1,4 +1,4 @@
-import { PropsWithChildrenAndClassName } from "../../props";
+import { PropsWithChildrenAndClassName } from "../../util/props";
 
 /**
  * A container styled as a message.

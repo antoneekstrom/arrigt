@@ -1,6 +1,8 @@
 import {
   createClient as createUrqlClient,
+  dedupExchange,
   defaultExchanges,
+  fetchExchange,
   subscriptionExchange,
 } from "urql";
 import {
@@ -8,6 +10,7 @@ import {
   Client as WebSocketClient,
 } from "graphql-ws";
 import { GRAPHQL_ENDPOINT } from "../env";
+import { cacheExchange } from "@urql/exchange-graphcache";
 
 export const client = createClient();
 
@@ -19,7 +22,7 @@ function createClient() {
         })
       : undefined;
 
-  const exchanges = [...defaultExchanges];
+  const exchanges = [dedupExchange, cacheExchange({}), fetchExchange];
 
   if (webSocketClient) {
     exchanges.push(createSubscriptionExchange(webSocketClient));
