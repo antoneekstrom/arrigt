@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { gql, TypedDocumentNode, useQuery } from "urql";
 import {
   Shimmer,
-  ShimmerCard,
   ShimmerList,
 } from "../../src/components/layout/Shimmer";
 import { EventDetails } from "../../src/components/pages/event/EventDetails";
