@@ -1,7 +1,8 @@
 import { Event } from "arrigt-backend/src/schema/types/Event";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { gql, TypedDocumentNode, useQuery } from "urql";
+import { gql, TypedDocumentNode, useQuery, useSubscription } from "urql";
 import { Shimmer, ShimmerList } from "../../src/components/layout/Shimmer";
 import { EventDetails } from "../../src/components/pages/event/EventDetails";
 import { RegistrationForm } from "../../src/components/pages/event/RegistrationForm";
@@ -50,6 +51,20 @@ export default function EventPage() {
   const eventId = useEventId();
   const { data, fetching } = useGetEventQuery();
 
+  useSubscription({
+    query: gql`
+      subscription ($id: String!) {
+        eventChanged(id: $id) {
+          id
+          title
+        }
+      }
+    `,
+    variables: {
+      id: eventId,
+    },
+  });
+
   const event = data?.event;
 
   return (
@@ -58,6 +73,7 @@ export default function EventPage() {
         <title>{event?.title && `${event.title} -`} arrIgT</title>
       </Head>
       <div className="col-span-2">
+        <Link href={`/event/edit/${eventId}`}>edit</Link>
         {event && <EventDetails event={event} />}
         {fetching && (
           <div className="grid h-[40rem] grid-cols-3 gap-16">
@@ -71,7 +87,7 @@ export default function EventPage() {
       <div>
         {event && (
           <div>
-            <SubTitle>Anmälan</SubTitle>
+            <SubTitle className="mb-8">Anmälan</SubTitle>
             <RegistrationForm event={event} />
           </div>
         )}

@@ -9,7 +9,7 @@ export function SubTitle({
     <h1
       className={`${insertClassName(
         className
-      )} mb-8 text-lg font-semibold leading-none`}>
+      )} text-lg font-semibold leading-none`}>
       {children}
     </h1>
   );

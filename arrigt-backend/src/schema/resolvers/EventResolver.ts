@@ -20,6 +20,11 @@ import { AddEventInput, UpdateEventInput } from "../inputs";
 import { Event } from "../types/Event";
 import { Registration } from "../types/Registration";
 
+type EventChangedPayload = {
+  event: Event;
+  id: string;
+};
+
 /**
  * Resolves the event object type.
  */
@@ -32,7 +37,18 @@ export class EventResolver {
   ) {}
 
   @Subscription((type) => Event, {
-    topics: "event",
+    topics: "eventChanged",
+    filter: ({ payload, args }) => payload.id === args.id,
+  })
+  async eventChanged(
+    @Root() payload: EventChangedPayload,
+    @Arg("id") _: string
+  ) {
+    return payload.event;
+  }
+
+  @Subscription((type) => Event, {
+    topics: "eventAdded",
   })
   async eventAdded(@Root() payload: Event) {
     return payload;
@@ -47,7 +63,8 @@ export class EventResolver {
   @Mutation((event) => Event)
   async updateEvent(
     @Arg("id") id: string,
-    @Arg("input") input: UpdateEventInput
+    @Arg("input") input: UpdateEventInput,
+    @PubSub() pubSub: PubSubEngine
   ) {
     await this.eventService.updateEvent(
       id,
@@ -55,6 +72,7 @@ export class EventResolver {
         Object.entries(input).filter(([, value]) => value !== undefined)
       )
     );
+    await pubSub.publish("eventChanged", { event: await this.event(id), id });
     return await this.eventService.getEvent(id);
   }
 
@@ -73,7 +91,7 @@ export class EventResolver {
     const event = applyDefaultEventDetails(input, input.responsible);
     const result = await this.eventService.addEvent(event);
     const eventWithId = { ...event, id: result.insertedId.toString() };
-    await pubSub.publish("event", eventWithId);
+    await pubSub.publish("eventAdded", eventWithId);
     return eventWithId;
   }
 

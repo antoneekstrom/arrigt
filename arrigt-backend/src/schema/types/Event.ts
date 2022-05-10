@@ -33,5 +33,5 @@ export class Event {
   agreement!: DataPrivacyAgreement;
 
   @Field((returns) => [Registration])
-  registrations?: Registration;
+  registrations?: Registration[];
 }
