@@ -8,6 +8,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
       MONGO_INITDB_DATABASE: ${MONGO_DB}
+
   mongo-express:
     image: mongo-express
     restart: unless-stopped
@@ -17,6 +18,7 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USER}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASS}
       ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USER}:${MONGO_PASS}@db:${PORT_DB}/
+
   frontend:
     restart: unless-stopped
     build:
@@ -30,6 +32,7 @@ services:
     volumes:
       - ./arrigt-frontend:/arrigt-frontend
       - /arrigt-frontend/node_modules
+
   backend:
     restart: unless-stopped
     build:
@@ -40,6 +43,12 @@ services:
       - PORT=${PORT_INTERNAL_DEFAULT}
       - GRAPHQL_PATH=${GRAPHQL_PATH}
       - CORS_URLS=${CORS_URLS}
+      - GAMMA_REDIRECT_PATH=${GAMMA_REDIRECT_PATH}
+      - GAMMA_REDIRECT_URI=${GAMMA_REDIRECT_URI}
+      - GAMMA_CLIENT_ID=${GAMMA_CLIENT_ID}
+      - GAMMA_CLIENT_SECRET=${GAMMA_CLIENT_SECRET}
+      - GAMMA_URL="http://localhost:${GAMMA_BACKEND_PORT}"
+      - GAMMA_LOCAL_URL="http://gamma-backend:${GAMMA_BACKEND_PORT}"
     ports:
       - ${PORT_BACKEND}:${PORT_INTERNAL_DEFAULT}
     volumes:
@@ -47,3 +56,60 @@ services:
       - /app/node_modules
     depends_on:
       - db
+
+  gamma-frontend:
+    image: cthit/gamma-frontend:development
+    environment:
+      # Proxies requests to the gamma API from the frontend to another address.
+      HTTP_PROXY: http://gamma-backend:3000
+    ports:
+      # Maps the port 3000 inside the container,
+      # which the frontend is served on, to a public port.
+      - ${GAMMA_FRONTEND_PORT}:3000
+
+  # Default admin login is "admin:password"
+  gamma-backend:
+    image: cthit/gamma-backend:development
+    environment:
+      PRODUCTION: "false"
+      IS_MOCKING: "true"
+
+      DB_USER: gamma
+      DB_PASSWORD: gamma
+      DB_HOST: gamma-db
+      DB_NAME: gamma
+      DB_PORT: 5432
+
+      REDIS_HOST: gamma-redis
+      REDIS_PORT: 6379
+
+      # Default id, secret and redirect URI for the mocked gamma client.
+      # Note: The client won't change if it has already been created.
+      DEFAULT_CLIENT_ID: ${GAMMA_CLIENT_ID}
+      DEFAULT_CLIENT_SECRET: ${GAMMA_CLIENT_SECRET}
+      DEFAULT_REDIRECT_URI: ${GAMMA_REDIRECT_URI}
+
+      # Where you are redirected when successfully logging into gamma.
+      SUCCESSFUL_LOGIN: http://localhost:${GAMMA_FRONTEND_PORT}
+
+      # (?)
+      CORS_ALLOWED_ORIGIN: http://localhost:${GAMMA_FRONTEND_PORT}
+
+      # (?)
+      BACKEND_URI: http://localhost:${GAMMA_BACKEND_PORT}/api/
+
+      # Port inside the container, on which the backend is served.
+      SERVER_PORT: 3000
+    ports:
+      # Maps the server port inside the container to a public port.
+      - ${GAMMA_BACKEND_PORT}:3000
+
+  gamma-redis:
+    image: redis:5.0
+
+  gamma-db:
+    image: postgres:10
+    environment:
+      POSTGRES_USER: gamma
+      POSTGRES_DB: gamma
+      POSTGRES_PASSWORD: gamma

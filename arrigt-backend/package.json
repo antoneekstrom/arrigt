@@ -19,6 +19,7 @@
     "typescript": "^4.6.3"
   },
   "dependencies": {
+    "@ekstrom/gamma-auth": "^1.0.11",
     "apollo-server-core": "^3.7.0",
     "apollo-server-express": "^3.6.7",
     "class-validator": "^0.13.2",

@@ -49,6 +49,12 @@ export async function useGraphQL({
   const apolloServer = new ApolloServer({
     schema,
     plugins,
+    context: ({ req }) => {
+      const context = {
+        user: req.session.user, // `req.user` comes from `express-session`
+      };
+      return context;
+    },
   });
 
   // Starts the apollo server

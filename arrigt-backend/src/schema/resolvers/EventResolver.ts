@@ -1,5 +1,6 @@
 import {
   Arg,
+  Authorized,
   FieldResolver,
   Mutation,
   PubSub,
@@ -30,6 +31,12 @@ export class EventResolver {
     private readonly registrationService: RegistrationService,
     private readonly eventService: EventService
   ) {}
+
+  @Query((type) => Boolean)
+  @Authorized()
+  async isLoggedIn() {
+    return true;
+  }
 
   @Subscription((type) => Event, {
     topics: "event",
@@ -94,6 +101,7 @@ export class EventResolver {
    *
    * @returns the events
    */
+  @Authorized()
   @Query((returns) => [Event], {
     description: "Returns all events which there are registrations for.",
   })
